@@ -48,50 +48,12 @@ color: rgb(255, 255, 255);</string>
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>90</y>
+       <y>120</y>
        <width>241</width>
        <height>211</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QPushButton" name="bus_button">
-        <property name="styleSheet">
-         <string notr="true">QPushButton:checked{
-	background-color:white;
-	color:black;
-}
-QPushButton{
-color: rgb(255, 255, 255);
-font: 14pt &quot;MS Shell Dlg 2&quot;;
-border: none;
-border-radius: 10px;
-margin-left: 10px;
-margin-right:10px;
-}
-</string>
-        </property>
-        <property name="text">
-         <string>Buses</string>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>icons/bus-32.png</normaloff>icons/bus-32.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>30</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="autoExclusive">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QPushButton" name="routes_button">
         <property name="styleSheet">
@@ -113,8 +75,46 @@ margin-right:10px;
          <string>Routes</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>icons/point-objects-32.png</normaloff>icons/point-objects-32.png</iconset>
+         <iconset resource="resources.qrc">
+          <normaloff>:/icons/point-objects-32.png</normaloff>:/icons/point-objects-32.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="bus_button">
+        <property name="styleSheet">
+         <string notr="true">QPushButton:checked{
+	background-color:white;
+	color:black;
+}
+QPushButton{
+color: rgb(255, 255, 255);
+font: 14pt &quot;MS Shell Dlg 2&quot;;
+border: none;
+border-radius: 10px;
+margin-left: 10px;
+margin-right:10px;
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Buses</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resources.qrc">
+          <normaloff>:/icons/bus-32.png</normaloff>:/icons/bus-32.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -154,8 +154,8 @@ margin-right:10px;
          <string>Drivers</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>icons/user-32.png</normaloff>icons/user-32.png</iconset>
+         <iconset resource="resources.qrc">
+          <normaloff>:/icons/user-32.png</normaloff>:/icons/user-32.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -207,8 +207,8 @@ margin-right:10px;
          <string>Settings</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>icons/settings-4-32.png</normaloff>icons/settings-4-32.png</iconset>
+         <iconset resource="resources.qrc">
+          <normaloff>:/icons/settings-4-32.png</normaloff>:/icons/settings-4-32.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -248,8 +248,8 @@ margin-right:10px;
          <string>Exit</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>icons/door-8-24.png</normaloff>icons/door-8-24.png</iconset>
+         <iconset resource="resources.qrc">
+          <normaloff>:/icons/door-8-24.png</normaloff>:/icons/door-8-24.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -290,7 +290,7 @@ background-color: rgb(255, 255, 255);</string>
        <height>721</height>
       </rect>
      </property>
-     <widget class="QWidget" name="page">
+     <widget class="QWidget" name="buses_page">
       <widget class="QLabel" name="label_4">
        <property name="geometry">
         <rect>
@@ -308,7 +308,42 @@ background-color: rgb(255, 255, 255);</string>
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="page_2"/>
+     <widget class="QWidget" name="routes_page">
+      <widget class="QLabel" name="label_5">
+       <property name="geometry">
+        <rect>
+         <x>350</x>
+         <y>300</y>
+         <width>131</width>
+         <height>81</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
+       </property>
+       <property name="text">
+        <string>Routes Page</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="drivers_page">
+      <widget class="QLabel" name="label_6">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>300</y>
+         <width>141</width>
+         <height>81</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
+       </property>
+       <property name="text">
+        <string>Drivers Page</string>
+       </property>
+      </widget>
+     </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="header" native="true">
@@ -376,6 +411,8 @@ color: rgb(153, 153, 153);
    </widget>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
