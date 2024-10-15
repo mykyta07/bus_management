@@ -1,0 +1,12 @@
+<RCC>
+  <qresource>
+    <file>icons/bus.png</file>
+    <file>icons/bus_front.png</file>
+    <file>icons/bus-32.png</file>
+    <file>icons/door-8-24.png</file>
+    <file>icons/person.png</file>
+    <file>icons/point-objects-32.png</file>
+    <file>icons/settings-4-32.png</file>
+    <file>icons/user-32.png</file>
+  </qresource>
+</RCC>
