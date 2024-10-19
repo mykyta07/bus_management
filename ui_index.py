@@ -15,16 +15,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QLabel, QLineEdit, QMainWindow,
-    QPushButton, QSizePolicy, QStackedWidget, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QHeaderView, QLabel, QLineEdit,
+    QMainWindow, QPushButton, QSizePolicy, QStackedWidget,
+    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
 import resources_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1126, 805)
+        MainWindow.resize(1119, 805)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.sidebar_menu = QWidget(self.centralwidget)
@@ -184,8 +184,46 @@ class Ui_MainWindow(object):
         self.buses_page.setObjectName(u"buses_page")
         self.label_4 = QLabel(self.buses_page)
         self.label_4.setObjectName(u"label_4")
-        self.label_4.setGeometry(QRect(370, 300, 121, 81))
-        self.label_4.setStyleSheet(u"font: 14pt \"MS Shell Dlg 2\";")
+        self.label_4.setGeometry(QRect(0, 0, 151, 61))
+        self.label_4.setStyleSheet(u"font: 75 16pt \"MS Shell Dlg 2\";")
+        self.label_7 = QLabel(self.buses_page)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setGeometry(QRect(0, 50, 611, 21))
+        self.label_7.setStyleSheet(u"font: 10pt \"MS Shell Dlg 2\";\n"
+"color: rgb(153, 153, 153);")
+        self.addBusButton = QPushButton(self.buses_page)
+        self.addBusButton.setObjectName(u"addBusButton")
+        self.addBusButton.setEnabled(True)
+        self.addBusButton.setGeometry(QRect(10, 90, 121, 41))
+        self.addBusButton.setStyleSheet(u"border:\"none\";\n"
+"background-color: rgb(0, 255, 127);\n"
+"font: 75 10pt \"MS Shell Dlg 2\";\n"
+"color: rgb(255, 255, 255);\n"
+"border-radius:\"10px\"")
+        self.addBusButton.setCheckable(True)
+        self.tableWidget = QTableWidget(self.buses_page)
+        if (self.tableWidget.columnCount() < 5):
+            self.tableWidget.setColumnCount(5)
+        __qtablewidgetitem = QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(0, __qtablewidgetitem)
+        __qtablewidgetitem1 = QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(1, __qtablewidgetitem1)
+        __qtablewidgetitem2 = QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(2, __qtablewidgetitem2)
+        __qtablewidgetitem3 = QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(3, __qtablewidgetitem3)
+        __qtablewidgetitem4 = QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(4, __qtablewidgetitem4)
+        self.tableWidget.setObjectName(u"tableWidget")
+        self.tableWidget.setGeometry(QRect(0, 140, 851, 571))
+        self.tableWidget.setStyleSheet(u"QHeaderView::section {\n"
+"	font-weight:bold;\n"
+"}")
+        self.tableWidget.setAlternatingRowColors(False)
+        self.tableWidget.setSortingEnabled(False)
+        self.tableWidget.setColumnCount(5)
+        self.tableWidget.horizontalHeader().setMinimumSectionSize(49)
+        self.tableWidget.horizontalHeader().setProperty(u"showSortIndicator", False)
         self.stackedWidget.addWidget(self.buses_page)
         self.routes_page = QWidget()
         self.routes_page.setObjectName(u"routes_page")
@@ -206,7 +244,7 @@ class Ui_MainWindow(object):
         self.header.setGeometry(QRect(250, 0, 871, 81))
         self.lineEdit = QLineEdit(self.header)
         self.lineEdit.setObjectName(u"lineEdit")
-        self.lineEdit.setGeometry(QRect(470, 20, 281, 31))
+        self.lineEdit.setGeometry(QRect(580, 30, 281, 31))
         self.lineEdit.setStyleSheet(u"padding-left:20 px;\n"
 "border: 1px solid gray;\n"
 "border-radius: 10px;")
@@ -236,7 +274,19 @@ class Ui_MainWindow(object):
         self.drivers_button.setText(QCoreApplication.translate("MainWindow", u"Drivers", None))
         self.settings_button.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
         self.exit_button.setText(QCoreApplication.translate("MainWindow", u"Exit", None))
-        self.label_4.setText(QCoreApplication.translate("MainWindow", u"Buses Page", None))
+        self.label_4.setText(QCoreApplication.translate("MainWindow", u"Buses info", None))
+        self.label_7.setText(QCoreApplication.translate("MainWindow", u"Welocme to buses information page!", None))
+        self.addBusButton.setText(QCoreApplication.translate("MainWindow", u"Add Bus", None))
+        ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)
+        ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Model", None));
+        ___qtablewidgetitem1 = self.tableWidget.horizontalHeaderItem(1)
+        ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Number Plate", None));
+        ___qtablewidgetitem2 = self.tableWidget.horizontalHeaderItem(2)
+        ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Mileage", None));
+        ___qtablewidgetitem3 = self.tableWidget.horizontalHeaderItem(3)
+        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Service due to", None));
+        ___qtablewidgetitem4 = self.tableWidget.horizontalHeaderItem(4)
+        ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"Actions", None));
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Routes Page", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Drivers Page", None))
         self.lineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Search...", None))
