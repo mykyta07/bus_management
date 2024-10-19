@@ -15,6 +15,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.routes_button.clicked.connect(self.switch_to_routes_page)
         self.drivers_button.clicked.connect(self.switch_to_drivers_page)
         self.addBusButton.clicked.connect(self.open_add_bus_dialog)
+        self.load_buses_data()
 
     def switch_to_buses_page(self):
         print("Switching to buses page")
@@ -32,6 +33,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def open_add_bus_dialog(self):
         dialog = BusesDialog(self)
         dialog.exec()
+        self.load_buses_data()
 
     def init_db(self):
         conn = sqlite3.connect('bus_management.db')
@@ -65,3 +67,23 @@ class BusesDialog(QDialog, Ui_busesDialog):
     def __init__(self, parent=None):
         super(BusesDialog, self).__init__(parent)
         self.setupUi(self)  # This is how you set up the UI
+
+        self.pushButton.clicked.connect(self.submit_data)
+        self.pushButton_2.clicked.connect(self.reject)
+
+    def submit_data(self):
+        model = self.lineEdit.text()
+        number_plate = self.lineEdit_2.text()
+        mileage = self.spinBox.value()
+        service_due_to = self.dateEdit.date().toString("yyyy-MM-dd")
+
+        conn = sqlite3.connect('bus_management.db')
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO Buses (model, number_plate, mileage, service_due_to)
+            VALUES (?, ?, ?, ?)
+        ''', (model, number_plate, mileage, service_due_to))
+        conn.commit()
+        conn.close()
+
+        self.accept()
