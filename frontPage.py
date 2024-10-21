@@ -1,6 +1,6 @@
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QMainWindow, QMenu, QWidget,  QTableWidgetItem, QDialog
-from PySide6.QtGui import QAction
+from PySide6.QtWidgets import QMainWindow, QMenu, QWidget,  QTableWidgetItem, QDialog, QPushButton, QHBoxLayout
+from PySide6.QtGui import QAction, QIcon
 from busesDialog import Ui_busesDialog
 from ui_index import Ui_MainWindow
 import sqlite3
@@ -57,11 +57,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         rows = cursor.fetchall()
         conn.close()
 
+        # Set column widths
+        self.tableWidget.setColumnWidth(0, 150)  # Width for 'model' column
+        self.tableWidget.setColumnWidth(1, 150)  # Width for 'number_plate' column
+        self.tableWidget.setColumnWidth(2, 100)  # Width for 'mileage' column
+        self.tableWidget.setColumnWidth(3, 150)  # Width for 'service_due_to' column
+        self.tableWidget.setColumnWidth(4, 150)  # Width for 'buttons' column
+
         self.tableWidget.setRowCount(len(rows))
         for row_idx, row_data in enumerate(rows):
             for col_idx, col_data in enumerate(row_data):
-                print(f"Setting item at ({row_idx}, {col_idx}): {col_data}")  # Debugging print statement
+                
+                
                 self.tableWidget.setItem(row_idx, col_idx, QTableWidgetItem(str(col_data)))
+
+                double_button_widget = DoubleButtonWidget(row_idx, row_data)
+                self.tableWidget.setCellWidget(row_idx, 4, double_button_widget)
+
 
 class BusesDialog(QDialog, Ui_busesDialog):
     def __init__(self, parent=None):
@@ -87,3 +99,60 @@ class BusesDialog(QDialog, Ui_busesDialog):
         conn.close()
 
         self.accept()
+
+class DoubleButtonWidget(QWidget):
+    def __init__(self, row_idx, row_data):
+        super().__init__()
+        self.row_idx = row_idx
+        self.row_data = row_data
+        self.init_ui()
+
+    def init_ui(self):
+        self.edit_button = QPushButton()
+        self.delete_button = QPushButton()
+        self.edit_button.setIcon(QIcon(":/icons/edit-3-24.png"))
+        self.delete_button.setIcon(QIcon(":/icons/delete-24.png"))
+        self.edit_button.setStyleSheet("""
+            QPushButton {
+                background-color: black;
+                color: white;
+                border: none;
+                border-radius: 10px;
+                padding: 5px 10px;
+            }
+            QPushButton:pressed {
+                background-color: #333;
+            }
+        """)
+        self.delete_button.setStyleSheet("""
+            QPushButton {
+                background-color: red;
+                color: white;
+                border: none;
+                border-radius: 10px;
+                padding: 5px 10px;
+            }
+            QPushButton:pressed {
+                background-color: #cc0000;
+            }
+        """)
+        self.edit_button.setMinimumSize(50, 20)  # Minimum size
+        self.edit_button.setMaximumSize(50, 20)  # Maximum size
+        self.delete_button.setMinimumSize(50, 20)  # Minimum size
+        self.delete_button.setMaximumSize(50, 20)
+
+        # Connect buttons to their respective slot methods
+        self.edit_button.clicked.connect(self.edit_row)
+        self.delete_button.clicked.connect(self.delete_row)
+
+        # Layout to arrange buttons horizontally
+        layout = QHBoxLayout()
+        layout.addWidget(self.edit_button)
+        layout.addWidget(self.delete_button)
+        self.setLayout(layout)
+
+    def edit_row(self):
+        print("Editing row", self.row_idx)
+
+    def delete_row(self):
+        print("Deleting row", self.row_idx)
