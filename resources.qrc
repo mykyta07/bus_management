@@ -8,5 +8,7 @@
     <file>icons/point-objects-32.png</file>
     <file>icons/settings-4-32.png</file>
     <file>icons/user-32.png</file>
+    <file>icons/delete-24.png</file>
+    <file>icons/edit-3-24.png</file>
   </qresource>
 </RCC>
