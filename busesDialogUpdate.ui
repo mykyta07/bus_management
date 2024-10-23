@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>busesDialog</class>
- <widget class="QDialog" name="busesDialog">
+ <class>busesDialogUpdate</class>
+ <widget class="QDialog" name="busesDialogUpdate">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>480</width>
+    <width>493</width>
     <height>388</height>
    </rect>
   </property>
@@ -97,10 +97,10 @@
     </property>
    </widget>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="UpdateBusButton">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>220</x>
      <y>330</y>
      <width>121</width>
      <height>41</height>
@@ -120,10 +120,10 @@ border-radius:&quot;10px&quot;</string>
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="CancelUpdateButton">
    <property name="geometry">
     <rect>
-     <x>330</x>
+     <x>360</x>
      <y>330</y>
      <width>121</width>
      <height>41</height>

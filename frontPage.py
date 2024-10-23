@@ -1,8 +1,9 @@
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import Qt, Signal, QDate
 from PySide6.QtWidgets import QMainWindow, QMenu, QWidget,  QTableWidgetItem, QDialog, QPushButton, QHBoxLayout, QMessageBox
 from PySide6.QtGui import QAction, QIcon
 from busesDialog import Ui_busesDialog
 from ui_index import Ui_MainWindow
+from busesDialogUpdate import Ui_busesDialogUpdate
 import sqlite3
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -155,7 +156,9 @@ class DoubleButtonWidget(QWidget):
         self.setLayout(layout)
 
     def edit_row(self):
-        print("Editing row", self.row_idx)
+        dialog = BusesDialogUpdate(self.row_data)  # Передаємо дані автобуса у діалогове вікно
+        if dialog.exec():
+            self.edit_clicked.emit(self.row_idx)  # Викликаємо сигнал для оновлення таблиці після редагування
 
     def delete_row(self):
         reply = QMessageBox.question(self, 'Delete Record',
@@ -168,3 +171,37 @@ class DoubleButtonWidget(QWidget):
             conn.commit()
             conn.close() 
             self.delete_clicked.emit(self.row_idx)  # Emit signal for delete button clicked
+
+class BusesDialogUpdate(QDialog, Ui_busesDialogUpdate):
+    def __init__(self, row_data, parent=None):
+        super(BusesDialogUpdate, self).__init__(parent)
+        self.setupUi(self)
+        self.row_data = row_data  # Отримуємо дані про автобус
+
+        # Заповнюємо поля форми поточними даними автобуса
+        self.lineEdit.setText(self.row_data[1])  # model
+        self.lineEdit_2.setText(self.row_data[2])  # number_plate
+        self.spinBox.setValue(self.row_data[3])  # mileage
+        self.dateEdit.setDate(QDate.fromString(self.row_data[4], "yyyy-MM-dd"))  # service_due_to
+
+        self.UpdateBusButton.clicked.connect(self.update_data)
+        self.CancelUpdateButton.clicked.connect(self.reject)
+
+    def update_data(self):
+        model = self.lineEdit.text()
+        number_plate = self.lineEdit_2.text()
+        mileage = self.spinBox.value()
+        service_due_to = self.dateEdit.date().toString("yyyy-MM-dd")
+
+        # Оновлюємо дані у базі даних
+        conn = sqlite3.connect('bus_management.db')
+        cursor = conn.cursor()
+        cursor.execute('''
+            UPDATE Buses 
+            SET model = ?, number_plate = ?, mileage = ?, service_due_to = ?
+            WHERE id = ?
+        ''', (model, number_plate, mileage, service_due_to, self.row_data[0]))
+        conn.commit()
+        conn.close()
+
+        self.accept()  # Закриваємо діалогове вікно після успішного оновлення
