@@ -4,6 +4,7 @@ from PySide6.QtGui import QAction, QIcon
 from busesDialog import Ui_busesDialog
 from ui_index import Ui_MainWindow
 from busesDialogUpdate import Ui_busesDialogUpdate
+from driversDialog import Ui_driversDialog
 import sqlite3
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -16,6 +17,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.routes_button.clicked.connect(self.switch_to_routes_page)
         self.drivers_button.clicked.connect(self.switch_to_drivers_page)
         self.addBusButton.clicked.connect(self.open_add_bus_dialog)
+        self.addDriverButton.clicked.connect(self.open_add_driver_dialog)
         self.load_buses_data()
 
     def switch_to_buses_page(self):
@@ -36,6 +38,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         dialog = BusesDialog(self)
         dialog.exec()
         self.load_buses_data()
+
+    def open_add_driver_dialog(self):
+        dialog = DriversDialog(self)
+        dialog.exec()
+        self.load_driver_data()
 
     def init_db(self):
         conn = sqlite3.connect('bus_management.db')
@@ -123,6 +130,31 @@ class BusesDialog(QDialog, Ui_busesDialog):
             INSERT INTO Buses (model, number_plate, mileage, service_due_to)
             VALUES (?, ?, ?, ?)
         ''', (model, number_plate, mileage, service_due_to))
+        conn.commit()
+        conn.close()
+
+        self.accept()
+
+class DriversDialog(QDialog, Ui_driversDialog):
+    def __init__(self, parent=None):
+        super(DriversDialog, self).__init__(parent)
+        self.setupUi(self)  
+
+        self.pushButton.clicked.connect(self.submit_data)
+        self.pushButton_2.clicked.connect(self.reject)
+
+    def submit_data(self):
+        first_name = self.lineEdit.text()
+        second_name = self.lineEdit_2.text()
+        license_number = self.lineEdit_3.text()
+        phone = self.lineEdit_4.text()
+
+        conn = sqlite3.connect('bus_management.db')
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO Drivers (first_name, last_name, license_number, phone)
+            VALUES (?, ?, ?, ?)
+        ''', (first_name, second_name, license_number, phone))
         conn.commit()
         conn.close()
 
