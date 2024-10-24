@@ -236,8 +236,46 @@ class Ui_MainWindow(object):
         self.drivers_page.setObjectName(u"drivers_page")
         self.label_6 = QLabel(self.drivers_page)
         self.label_6.setObjectName(u"label_6")
-        self.label_6.setGeometry(QRect(340, 300, 141, 81))
-        self.label_6.setStyleSheet(u"font: 14pt \"MS Shell Dlg 2\";")
+        self.label_6.setGeometry(QRect(0, 0, 151, 61))
+        self.label_6.setStyleSheet(u"font: 75 16pt \"MS Shell Dlg 2\";")
+        self.label_8 = QLabel(self.drivers_page)
+        self.label_8.setObjectName(u"label_8")
+        self.label_8.setGeometry(QRect(0, 50, 611, 21))
+        self.label_8.setStyleSheet(u"font: 10pt \"MS Shell Dlg 2\";\n"
+"color: rgb(153, 153, 153);")
+        self.addDriverButton = QPushButton(self.drivers_page)
+        self.addDriverButton.setObjectName(u"addDriverButton")
+        self.addDriverButton.setEnabled(True)
+        self.addDriverButton.setGeometry(QRect(10, 90, 121, 41))
+        self.addDriverButton.setStyleSheet(u"border:\"none\";\n"
+"background-color: rgb(0, 255, 127);\n"
+"font: 75 10pt \"MS Shell Dlg 2\";\n"
+"color: rgb(255, 255, 255);\n"
+"border-radius:\"10px\"")
+        self.addDriverButton.setCheckable(True)
+        self.driverTable = QTableWidget(self.drivers_page)
+        if (self.driverTable.columnCount() < 5):
+            self.driverTable.setColumnCount(5)
+        __qtablewidgetitem5 = QTableWidgetItem()
+        self.driverTable.setHorizontalHeaderItem(0, __qtablewidgetitem5)
+        __qtablewidgetitem6 = QTableWidgetItem()
+        self.driverTable.setHorizontalHeaderItem(1, __qtablewidgetitem6)
+        __qtablewidgetitem7 = QTableWidgetItem()
+        self.driverTable.setHorizontalHeaderItem(2, __qtablewidgetitem7)
+        __qtablewidgetitem8 = QTableWidgetItem()
+        self.driverTable.setHorizontalHeaderItem(3, __qtablewidgetitem8)
+        __qtablewidgetitem9 = QTableWidgetItem()
+        self.driverTable.setHorizontalHeaderItem(4, __qtablewidgetitem9)
+        self.driverTable.setObjectName(u"driverTable")
+        self.driverTable.setGeometry(QRect(0, 140, 851, 571))
+        self.driverTable.setStyleSheet(u"QHeaderView::section {\n"
+"	font-weight:bold;\n"
+"}")
+        self.driverTable.setAlternatingRowColors(False)
+        self.driverTable.setSortingEnabled(False)
+        self.driverTable.setColumnCount(5)
+        self.driverTable.horizontalHeader().setMinimumSectionSize(49)
+        self.driverTable.horizontalHeader().setProperty(u"showSortIndicator", False)
         self.stackedWidget.addWidget(self.drivers_page)
         self.header = QWidget(self.centralwidget)
         self.header.setObjectName(u"header")
@@ -288,7 +326,19 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem4 = self.tableWidget.horizontalHeaderItem(4)
         ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"Actions", None));
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Routes Page", None))
-        self.label_6.setText(QCoreApplication.translate("MainWindow", u"Drivers Page", None))
+        self.label_6.setText(QCoreApplication.translate("MainWindow", u"Drivers info", None))
+        self.label_8.setText(QCoreApplication.translate("MainWindow", u"Welocme to driver information page!", None))
+        self.addDriverButton.setText(QCoreApplication.translate("MainWindow", u"Add driver", None))
+        ___qtablewidgetitem5 = self.driverTable.horizontalHeaderItem(0)
+        ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"First Name", None));
+        ___qtablewidgetitem6 = self.driverTable.horizontalHeaderItem(1)
+        ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"Second Name", None));
+        ___qtablewidgetitem7 = self.driverTable.horizontalHeaderItem(2)
+        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"License nunmber", None));
+        ___qtablewidgetitem8 = self.driverTable.horizontalHeaderItem(3)
+        ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"Phone", None));
+        ___qtablewidgetitem9 = self.driverTable.horizontalHeaderItem(4)
+        ___qtablewidgetitem9.setText(QCoreApplication.translate("MainWindow", u"Actions", None));
         self.lineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Search...", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Hi, Admin!", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Welcome to Bus Managment", None))
