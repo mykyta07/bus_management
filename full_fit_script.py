@@ -13,7 +13,7 @@ class BusManagementDB:
         # Create the Buses table if it doesn't already exist
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS Buses (
-                id INTEGER PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 model TEXT,
                 number_plate TEXT,
                 mileage INTEGER,
@@ -21,10 +21,22 @@ class BusManagementDB:
             )
         ''')
 
+        # Create the Driver table if it doesn't already exist
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS Drivers (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                first_name TEXT,
+                last_name TEXT,
+                license_number TEXT,
+                phone TEXT
+            )
+        ''')
+
         # Commit the changes and close the connection
         conn.commit()
         conn.close()
 
+    # Method to add a bus
     def add_bus(self, model, number_plate, mileage, service_due_to):
         conn = sqlite3.connect(self.db_name)
         cursor = conn.cursor()
@@ -39,6 +51,7 @@ class BusManagementDB:
         conn.commit()
         conn.close()
 
+    # Method to get all buses
     def get_all_buses(self):
         conn = sqlite3.connect(self.db_name)
         cursor = conn.cursor()
@@ -52,7 +65,36 @@ class BusManagementDB:
 
         return buses
 
-# Script to create the database and add sample data
+    # Method to add a driver
+    def add_driver(self, first_name, last_name, license_number, phone):
+        conn = sqlite3.connect(self.db_name)
+        cursor = conn.cursor()
+
+        # Insert a new driver record into the Driver table
+        cursor.execute('''
+            INSERT INTO Drivers (first_name, last_name, license_number, phone)
+            VALUES (?, ?, ?, ?)
+        ''', (first_name, last_name, license_number, phone))
+
+        # Commit the transaction and close the connection
+        conn.commit()
+        conn.close()
+
+    # Method to get all drivers
+    def get_all_drivers(self):
+        conn = sqlite3.connect(self.db_name)
+        cursor = conn.cursor()
+
+        # Fetch all records from the Driver table
+        cursor.execute('SELECT * FROM Driver')
+        drivers = cursor.fetchall()
+
+        # Close the connection
+        conn.close()
+
+        return drivers
+
+# Script to create the database, add sample data, and retrieve the data
 if __name__ == "__main__":
     # Initialize the database
     db = BusManagementDB()
@@ -62,7 +104,9 @@ if __name__ == "__main__":
     db.add_bus("Volvo", "XYZ456", 75000, "2024-12-15")
     db.add_bus("Scania", "LMN789", 30000, "2025-01-20")
 
-    # Retrieve and display all buses
-    buses = db.get_all_buses()
-    for bus in buses:
-        print(f"ID: {bus[0]}, Model: {bus[1]}, Number Plate: {bus[2]}, Mileage: {bus[3]}, Service Due To: {bus[4]}")
+    # Add sample drivers
+    db.add_driver("John", "Doe", "DL12345", "555-1234")
+    db.add_driver("Jane", "Smith", "DL54321", "555-5678")
+    db.add_driver("Mike", "Johnson", "DL98765", "555-8765")
+
+    

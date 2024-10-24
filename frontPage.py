@@ -30,6 +30,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def switch_to_drivers_page(self):
         print("Switching to drivers page")
         self.stackedWidget.setCurrentIndex(2)
+        self.load_driver_data()
 
     def open_add_bus_dialog(self):
         dialog = BusesDialog(self)
@@ -46,6 +47,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 number_plate TEXT,
                 mileage INTEGER,
                 service_due_to TEXT
+            )
+        ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS Driver (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                first_name TEXT,
+                last_name TEXT,
+                license_number TEXT,
+                phone TEXT
             )
         ''')
         conn.commit()
@@ -76,6 +86,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 double_button_widget.edit_clicked.connect(self.load_buses_data)
                 double_button_widget.delete_clicked.connect(self.load_buses_data)
                 self.tableWidget.setCellWidget(row_idx, 4, double_button_widget)
+    
+    def load_driver_data(self):
+        conn = sqlite3.connect('bus_management.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Drivers")
+        rows = cursor.fetchall()
+        conn.close()
+
+        # Set column widths
+        self.driverTable.setColumnWidth(0, 150)
+
+        self.driverTable.setRowCount(len(rows))
+        for row_idx, row_data in enumerate(rows):
+            for col_idx, col_data in enumerate(row_data[1:]):
+                self.driverTable.setItem(row_idx, col_idx, QTableWidgetItem(str(col_data)))
 
 
 class BusesDialog(QDialog, Ui_busesDialog):
@@ -170,18 +195,18 @@ class DoubleButtonWidget(QWidget):
             cursor.execute("DELETE FROM Buses WHERE id = ?", (self.row_data[0],))
             conn.commit()
             conn.close() 
-            self.delete_clicked.emit(self.row_idx)  # Emit signal for delete button clicked
+            self.delete_clicked.emit(self.row_idx)  
 
 class BusesDialogUpdate(QDialog, Ui_busesDialogUpdate):
     def __init__(self, row_data, parent=None):
         super(BusesDialogUpdate, self).__init__(parent)
         self.setupUi(self)
-        self.row_data = row_data  # Отримуємо дані про автобус
+        self.row_data = row_data  
 
-        # Заповнюємо поля форми поточними даними автобуса
-        self.lineEdit.setText(self.row_data[1])  # model
-        self.lineEdit_2.setText(self.row_data[2])  # number_plate
-        self.spinBox.setValue(self.row_data[3])  # mileage
+
+        self.lineEdit.setText(self.row_data[1]) 
+        self.lineEdit_2.setText(self.row_data[2]) 
+        self.spinBox.setValue(self.row_data[3])  
         self.dateEdit.setDate(QDate.fromString(self.row_data[4], "yyyy-MM-dd"))  # service_due_to
 
         self.UpdateBusButton.clicked.connect(self.update_data)
@@ -193,7 +218,6 @@ class BusesDialogUpdate(QDialog, Ui_busesDialogUpdate):
         mileage = self.spinBox.value()
         service_due_to = self.dateEdit.date().toString("yyyy-MM-dd")
 
-        # Оновлюємо дані у базі даних
         conn = sqlite3.connect('bus_management.db')
         cursor = conn.cursor()
         cursor.execute('''
@@ -204,4 +228,5 @@ class BusesDialogUpdate(QDialog, Ui_busesDialogUpdate):
         conn.commit()
         conn.close()
 
-        self.accept()  # Закриваємо діалогове вікно після успішного оновлення
+        self.accept()  
+
