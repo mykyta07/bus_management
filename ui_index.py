@@ -334,7 +334,7 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem6 = self.driverTable.horizontalHeaderItem(1)
         ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"Second Name", None));
         ___qtablewidgetitem7 = self.driverTable.horizontalHeaderItem(2)
-        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"License nunmber", None));
+        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"License number", None));
         ___qtablewidgetitem8 = self.driverTable.horizontalHeaderItem(3)
         ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"Phone", None));
         ___qtablewidgetitem9 = self.driverTable.horizontalHeaderItem(4)

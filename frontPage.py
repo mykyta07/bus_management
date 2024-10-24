@@ -5,6 +5,7 @@ from busesDialog import Ui_busesDialog
 from ui_index import Ui_MainWindow
 from busesDialogUpdate import Ui_busesDialogUpdate
 from driversDialog import Ui_driversDialog
+from driversDialogUpdate import Ui_driversDialogUpdate
 import sqlite3
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -103,11 +104,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Set column widths
         self.driverTable.setColumnWidth(0, 150)
+        self.driverTable.setColumnWidth(1, 150)
+        self.driverTable.setColumnWidth(2, 150)
+        self.driverTable.setColumnWidth(3, 150)
+        self.driverTable.setColumnWidth(4, 150)
+        
 
         self.driverTable.setRowCount(len(rows))
         for row_idx, row_data in enumerate(rows):
             for col_idx, col_data in enumerate(row_data[1:]):
                 self.driverTable.setItem(row_idx, col_idx, QTableWidgetItem(str(col_data)))
+
+                double_button_widget = DoubleButtonWidgetDrivers(row_idx, row_data)
+                double_button_widget.edit_clicked.connect(self.load_driver_data)
+                double_button_widget.delete_clicked.connect(self.load_driver_data)
+                self.driverTable.setCellWidget(row_idx, 4, double_button_widget)
+
 
 
 class BusesDialog(QDialog, Ui_busesDialog):
@@ -229,6 +241,30 @@ class DoubleButtonWidget(QWidget):
             conn.close() 
             self.delete_clicked.emit(self.row_idx)  
 
+
+class DoubleButtonWidgetDrivers(DoubleButtonWidget):
+    def __init__(self, row_idx, row_data, parent=None):
+        super().__init__(row_idx, row_data)
+        self.parent = parent
+
+    def edit_row(self):
+        dialog = DriversDialogUpdate(self.row_data)
+        if dialog.exec():
+            self.edit_clicked.emit(self.row_idx)
+
+    def delete_row(self): 
+        reply = QMessageBox.question(self, 'Delete Record',
+                                     "Are you sure you want to delete this record?",
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            conn = sqlite3.connect('bus_management.db')
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM Drivers WHERE id = ?", (self.row_data[0],))
+            conn.commit()
+            conn.close() 
+            self.delete_clicked.emit(self.row_idx)
+    
+
 class BusesDialogUpdate(QDialog, Ui_busesDialogUpdate):
     def __init__(self, row_data, parent=None):
         super(BusesDialogUpdate, self).__init__(parent)
@@ -261,4 +297,39 @@ class BusesDialogUpdate(QDialog, Ui_busesDialogUpdate):
         conn.close()
 
         self.accept()  
+
+
+
+class DriversDialogUpdate(QDialog, Ui_driversDialogUpdate):
+    def __init__(self, row_data, parent=None):
+        super(DriversDialogUpdate, self).__init__(parent)
+        self.setupUi(self)
+        self.row_data = row_data  
+
+
+        self.lineEdit.setText(self.row_data[1]) 
+        self.lineEdit_2.setText(self.row_data[2]) 
+        self.lineEdit_3.setText(self.row_data[3]) 
+        self.lineEdit_4.setText(self.row_data[4]) 
+
+        self.pushButton.clicked.connect(self.update_data)
+        self.pushButton_2.clicked.connect(self.reject)
+
+    def update_data(self):
+        first_name = self.lineEdit.text()
+        second_name = self.lineEdit_2.text()
+        license_number = self.lineEdit_3.text()
+        phone = self.lineEdit_4.text()
+
+        conn = sqlite3.connect('bus_management.db')
+        cursor = conn.cursor()
+        cursor.execute('''
+            UPDATE Drivers 
+            SET first_name = ?, last_name = ?, license_number = ?, phone = ?
+            WHERE id = ?
+        ''', (first_name, second_name, license_number, phone, self.row_data[0]))
+        conn.commit()
+        conn.close()
+
+        self.accept()
 

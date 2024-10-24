@@ -525,7 +525,7 @@ border-radius:&quot;10px&quot;</string>
        </column>
        <column>
         <property name="text">
-         <string>License nunmber</string>
+         <string>License number</string>
         </property>
        </column>
        <column>
