@@ -1,11 +1,11 @@
 from PySide6.QtCore import Qt, Signal, QDate
 from PySide6.QtWidgets import QMainWindow, QMenu, QWidget,  QTableWidgetItem, QDialog, QPushButton, QHBoxLayout, QMessageBox
 from PySide6.QtGui import QAction, QIcon
-from busesDialog import Ui_busesDialog
+from components.busesDialog import Ui_busesDialog
 from ui_index import Ui_MainWindow
-from busesDialogUpdate import Ui_busesDialogUpdate
-from driversDialog import Ui_driversDialog
-from driversDialogUpdate import Ui_driversDialogUpdate
+from components.busesDialogUpdate import Ui_busesDialogUpdate
+from components.driversDialog import Ui_driversDialog
+from components.driversDialogUpdate import Ui_driversDialogUpdate
 import sqlite3
 
 class MainWindow(QMainWindow, Ui_MainWindow):
