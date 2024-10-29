@@ -286,8 +286,8 @@ background-color: rgb(255, 255, 255);</string>
       <rect>
        <x>10</x>
        <y>0</y>
-       <width>871</width>
-       <height>721</height>
+       <width>851</width>
+       <height>711</height>
       </rect>
      </property>
      <widget class="QWidget" name="buses_page">
@@ -410,18 +410,259 @@ border-radius:&quot;10px&quot;</string>
       <widget class="QLabel" name="label_5">
        <property name="geometry">
         <rect>
-         <x>350</x>
-         <y>300</y>
-         <width>131</width>
-         <height>81</height>
+         <x>10</x>
+         <y>10</y>
+         <width>171</width>
+         <height>61</height>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
+        <string notr="true">font: 75 16pt &quot;MS Shell Dlg 2&quot;;</string>
        </property>
        <property name="text">
-        <string>Routes Page</string>
+        <string>Create Route</string>
        </property>
+      </widget>
+      <widget class="QLabel" name="label_9">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>60</y>
+         <width>611</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(153, 153, 153);</string>
+       </property>
+       <property name="text">
+        <string>Welcome to the page for creating route</string>
+       </property>
+      </widget>
+      <widget class="QWidget" name="mapWidget" native="true">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>80</y>
+         <width>431</width>
+         <height>611</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QSplitter" name="splitter_2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>190</y>
+         <width>381</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <widget class="QLabel" name="label_12">
+        <property name="styleSheet">
+         <string notr="true">font: 75 14pt &quot;MS Shell Dlg 2&quot;;</string>
+        </property>
+        <property name="text">
+         <string>Bus</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxBus">
+        <property name="styleSheet">
+         <string notr="true">border:none;
+</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QSplitter" name="splitter_3">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>270</y>
+         <width>381</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <widget class="QLabel" name="label_13">
+        <property name="styleSheet">
+         <string notr="true">font: 75 14pt &quot;MS Shell Dlg 2&quot;;</string>
+        </property>
+        <property name="text">
+         <string>Point A</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxA">
+        <property name="styleSheet">
+         <string notr="true">border:none;
+</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>Kyiv</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Odesa</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Lviv</string>
+         </property>
+        </item>
+       </widget>
+      </widget>
+      <widget class="QSplitter" name="splitter_4">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>350</y>
+         <width>381</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <widget class="QLabel" name="label_14">
+        <property name="styleSheet">
+         <string notr="true">font: 75 14pt &quot;MS Shell Dlg 2&quot;;</string>
+        </property>
+        <property name="text">
+         <string>Point B</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxB">
+        <property name="styleSheet">
+         <string notr="true">border:none;
+</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>Kyiv</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Odesa</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Lviv</string>
+         </property>
+        </item>
+       </widget>
+      </widget>
+      <widget class="QSplitter" name="splitter_5">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>420</y>
+         <width>381</width>
+         <height>81</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <widget class="QLabel" name="label_10">
+        <property name="styleSheet">
+         <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
+        </property>
+        <property name="text">
+         <string>Start date</string>
+        </property>
+       </widget>
+       <widget class="QDateEdit" name="dateEdit">
+        <property name="dateTime">
+         <datetime>
+          <hour>0</hour>
+          <minute>0</minute>
+          <second>0</second>
+          <year>2024</year>
+          <month>9</month>
+          <day>14</day>
+         </datetime>
+        </property>
+        <property name="maximumDateTime">
+         <datetime>
+          <hour>23</hour>
+          <minute>59</minute>
+          <second>59</second>
+          <year>2025</year>
+          <month>12</month>
+          <day>31</day>
+         </datetime>
+        </property>
+        <property name="minimumDateTime">
+         <datetime>
+          <hour>0</hour>
+          <minute>0</minute>
+          <second>0</second>
+          <year>2024</year>
+          <month>9</month>
+          <day>14</day>
+         </datetime>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QPushButton" name="pushButtonRoute">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>640</y>
+         <width>231</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border:&quot;none&quot;;
+background-color: rgb(0, 255, 127);
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(255, 255, 255);
+border-radius:&quot;10px&quot;</string>
+       </property>
+       <property name="text">
+        <string>Create </string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QSplitter" name="splitter">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>110</y>
+         <width>381</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <widget class="QLabel" name="label_11">
+        <property name="styleSheet">
+         <string notr="true">font: 75 14pt &quot;MS Shell Dlg 2&quot;;</string>
+        </property>
+        <property name="text">
+         <string>Driver</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxDriver">
+        <property name="styleSheet">
+         <string notr="true">border:none;
+</string>
+        </property>
+       </widget>
       </widget>
      </widget>
      <widget class="QWidget" name="drivers_page">
