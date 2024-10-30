@@ -1,11 +1,14 @@
-from PySide6.QtCore import Qt, Signal, QDate
-from PySide6.QtWidgets import QMainWindow, QMenu, QWidget,  QTableWidgetItem, QDialog, QPushButton, QHBoxLayout, QMessageBox
+from PySide6.QtCore import Qt, Signal, QDate, QUrl, QBuffer, QByteArray, QIODevice
+from PySide6.QtWidgets import QMainWindow, QMenu, QWidget,  QTableWidgetItem, QDialog, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox
 from PySide6.QtGui import QAction, QIcon
+from PySide6.QtWebEngineWidgets import QWebEngineView
 from components.busesDialog import Ui_busesDialog
 from ui_index import Ui_MainWindow
 from components.busesDialogUpdate import Ui_busesDialogUpdate
 from components.driversDialog import Ui_driversDialog
 from components.driversDialogUpdate import Ui_driversDialogUpdate
+
+from api import plot_route
 import sqlite3
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -19,6 +22,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.drivers_button.clicked.connect(self.switch_to_drivers_page)
         self.addBusButton.clicked.connect(self.open_add_bus_dialog)
         self.addDriverButton.clicked.connect(self.open_add_driver_dialog)
+        self.pushButtonRoute.clicked.connect(self.create_routes)
         self.load_buses_data()
 
     def switch_to_buses_page(self):
@@ -94,6 +98,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 double_button_widget.edit_clicked.connect(self.load_buses_data)
                 double_button_widget.delete_clicked.connect(self.load_buses_data)
                 self.tableWidget.setCellWidget(row_idx, 4, double_button_widget)
+        
+
+        self.comboBoxBus.clear()
+        for row in rows:
+            bus_id = row[0]
+            bus_model = row[1]
+            self.comboBoxBus.addItem(bus_model, bus_id)  
     
     def load_driver_data(self):
         conn = sqlite3.connect('bus_management.db')
@@ -119,6 +130,69 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 double_button_widget.edit_clicked.connect(self.load_driver_data)
                 double_button_widget.delete_clicked.connect(self.load_driver_data)
                 self.driverTable.setCellWidget(row_idx, 4, double_button_widget)
+
+        self.comboBoxDriver.clear()
+        for row in rows:
+            driver_id = row[0]
+            driver_name = row[1] + ' ' + row[2]
+            self.comboBoxDriver.addItem(driver_name, driver_id)
+
+
+    def create_routes(self):
+        driver_id = self.comboBoxDriver.currentData()
+        bus_id = self.comboBoxBus.currentData()
+        point_a = self.comboBoxA.currentText()
+        point_b = self.comboBoxB.currentText()
+        start_date = self.dateEdit.date().toString("yyyy-MM-dd")
+
+        print (driver_id, bus_id, point_a, point_b, start_date)
+
+        if point_a == "Kyiv":
+            cordinates_a_lat, cordinates_a_lng = 50.4501, 30.523
+        elif point_a == "Lviv":
+            cordinates_a_lat, cordinates_a_lng = 49.8397, 24.0297
+        elif point_a == "Odesa":
+            cordinates_a_lat, cordinates_a_lng = 46.4825, 30.7233
+        
+        if point_b == "Kyiv":
+            cordinates_b_lat, cordinates_b_lng = 50.4501, 30.523
+        elif point_b == "Lviv":
+            cordinates_b_lat, cordinates_b_lng = 49.8397, 24.0297
+        elif point_b == "Odesa":
+            cordinates_b_lat, cordinates_b_lng = 46.4825, 30.7233
+        
+        api_key = "AIzaSyAWCPvwtBP7nBBMKAUBg1BwZS_T2H_mpPc"
+
+        distance, time = plot_route(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng)
+
+        html_content = generate_html(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng)
+
+        # Check if there is an existing layout
+        if not self.mapWidget.layout():
+            layout = QVBoxLayout(self.mapWidget)
+            self.mapWidget.setLayout(layout)
+        else:
+            layout = self.mapWidget.layout()
+
+        # Remove any existing QWebEngineView from the layout
+        for i in reversed(range(layout.count())):
+            widget_to_remove = layout.itemAt(i).widget()
+            if isinstance(widget_to_remove, QWebEngineView):
+                layout.removeWidget(widget_to_remove)
+                widget_to_remove.deleteLater()  # Safely delete the widget
+
+        # Create a new QWebEngineView instance
+        web_view = QWebEngineView()
+
+        # Load the dynamic HTML content into the QWebEngineView
+        buffer = QBuffer()
+        buffer.setData(QByteArray(html_content.encode()))
+        buffer.open(QIODevice.ReadOnly)
+
+        web_view.setHtml(buffer.readAll().data().decode())
+
+        # Add the new QWebEngineView to the layout
+        layout.addWidget(web_view)
 
 
 
@@ -271,7 +345,6 @@ class BusesDialogUpdate(QDialog, Ui_busesDialogUpdate):
         self.setupUi(self)
         self.row_data = row_data  
 
-
         self.lineEdit.setText(self.row_data[1]) 
         self.lineEdit_2.setText(self.row_data[2]) 
         self.spinBox.setValue(self.row_data[3])  
@@ -333,3 +406,34 @@ class DriversDialogUpdate(QDialog, Ui_driversDialogUpdate):
 
         self.accept()
 
+def generate_html(api_key, origin_lat, origin_lng, dest_lat, dest_lng):
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Google Maps Route</title>
+            <style>
+            html, body {{
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }}
+            iframe {{
+                width: 100%;
+                height: 100%;
+                border: 0;
+            }}
+            </style>
+        </head>
+        <body>
+            <iframe
+            width="100%"
+            height="100%"
+            frameborder="0" style="border:0"
+            src="https://www.google.com/maps/embed/v1/directions?key={api_key}&origin={origin_lat},{origin_lng}&destination={dest_lat},{dest_lng}&mode=driving&zoom=7"
+            allowfullscreen>
+            </iframe>
+        </body>
+        </html>
+        """
+        return html_content
