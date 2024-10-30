@@ -7,8 +7,8 @@ from ui_index import Ui_MainWindow
 from components.busesDialogUpdate import Ui_busesDialogUpdate
 from components.driversDialog import Ui_driversDialog
 from components.driversDialogUpdate import Ui_driversDialogUpdate
-
-from api import plot_route
+from script.db_control import *
+from script.api import plot_route
 import sqlite3
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -50,35 +50,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.load_driver_data()
 
     def init_db(self):
-        conn = sqlite3.connect('bus_management.db')
-        cursor = conn.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS Buses (
-                id INTEGER PRIMARY KEY,
-                model TEXT,
-                number_plate TEXT,
-                mileage INTEGER,
-                service_due_to TEXT
-            )
-        ''')
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS Driver (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                first_name TEXT,
-                last_name TEXT,
-                license_number TEXT,
-                phone TEXT
-            )
-        ''')
-        conn.commit()
-        conn.close()
+        create_db()
 
     def load_buses_data(self):
-        conn = sqlite3.connect('bus_management.db')
-        cursor = conn.cursor()
-        cursor.execute("SELECT id, model, number_plate, mileage, service_due_to FROM Buses")
-        rows = cursor.fetchall()
-        conn.close()
+        rows = load_bus()
 
         # Set column widths
         self.tableWidget.setColumnWidth(0, 150)  # Width for 'model' column
@@ -107,11 +82,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.comboBoxBus.addItem(bus_model, bus_id)  
     
     def load_driver_data(self):
-        conn = sqlite3.connect('bus_management.db')
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM Drivers")
-        rows = cursor.fetchall()
-        conn.close()
+        rows = load_driver()
 
         # Set column widths
         self.driverTable.setColumnWidth(0, 150)
@@ -210,14 +181,7 @@ class BusesDialog(QDialog, Ui_busesDialog):
         mileage = self.spinBox.value()
         service_due_to = self.dateEdit.date().toString("yyyy-MM-dd")
 
-        conn = sqlite3.connect('bus_management.db')
-        cursor = conn.cursor()
-        cursor.execute('''
-            INSERT INTO Buses (model, number_plate, mileage, service_due_to)
-            VALUES (?, ?, ?, ?)
-        ''', (model, number_plate, mileage, service_due_to))
-        conn.commit()
-        conn.close()
+        add_bus(model, number_plate, mileage, service_due_to)
 
         self.accept()
 
@@ -235,14 +199,7 @@ class DriversDialog(QDialog, Ui_driversDialog):
         license_number = self.lineEdit_3.text()
         phone = self.lineEdit_4.text()
 
-        conn = sqlite3.connect('bus_management.db')
-        cursor = conn.cursor()
-        cursor.execute('''
-            INSERT INTO Drivers (first_name, last_name, license_number, phone)
-            VALUES (?, ?, ?, ?)
-        ''', (first_name, second_name, license_number, phone))
-        conn.commit()
-        conn.close()
+        add_driver(first_name, second_name, license_number, phone)
 
         self.accept()
 
@@ -331,11 +288,7 @@ class DoubleButtonWidgetDrivers(DoubleButtonWidget):
                                      "Are you sure you want to delete this record?",
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
-            conn = sqlite3.connect('bus_management.db')
-            cursor = conn.cursor()
-            cursor.execute("DELETE FROM Drivers WHERE id = ?", (self.row_data[0],))
-            conn.commit()
-            conn.close() 
+            delete_driver(self.row_data[0])
             self.delete_clicked.emit(self.row_idx)
     
 
@@ -359,15 +312,7 @@ class BusesDialogUpdate(QDialog, Ui_busesDialogUpdate):
         mileage = self.spinBox.value()
         service_due_to = self.dateEdit.date().toString("yyyy-MM-dd")
 
-        conn = sqlite3.connect('bus_management.db')
-        cursor = conn.cursor()
-        cursor.execute('''
-            UPDATE Buses 
-            SET model = ?, number_plate = ?, mileage = ?, service_due_to = ?
-            WHERE id = ?
-        ''', (model, number_plate, mileage, service_due_to, self.row_data[0]))
-        conn.commit()
-        conn.close()
+        update_bus(self.row_data[0], model, number_plate, mileage, service_due_to)
 
         self.accept()  
 
@@ -394,15 +339,7 @@ class DriversDialogUpdate(QDialog, Ui_driversDialogUpdate):
         license_number = self.lineEdit_3.text()
         phone = self.lineEdit_4.text()
 
-        conn = sqlite3.connect('bus_management.db')
-        cursor = conn.cursor()
-        cursor.execute('''
-            UPDATE Drivers 
-            SET first_name = ?, last_name = ?, license_number = ?, phone = ?
-            WHERE id = ?
-        ''', (first_name, second_name, license_number, phone, self.row_data[0]))
-        conn.commit()
-        conn.close()
+        update_driver(self.row_data[0], first_name, second_name, license_number, phone)
 
         self.accept()
 
