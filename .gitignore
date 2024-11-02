@@ -1,4 +1,6 @@
-.pyc
-bud_managment.db
+__pycache__
+components/__pycache__
+script/__pycache__
+bus_management.db
 route_response.json
-.txt
+*.txt
