@@ -110,60 +110,81 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
     def create_routes(self):
+        load_bus()
+        load_driver()
+
         driver_id = self.comboBoxDriver.currentData()
         bus_id = self.comboBoxBus.currentData()
         point_a = self.comboBoxA.currentText()
         point_b = self.comboBoxB.currentText()
         start_date = self.dateEdit.date().toString("yyyy-MM-dd")
 
-        print (driver_id, bus_id, point_a, point_b, start_date)
-
-        if point_a == "Kyiv":
-            cordinates_a_lat, cordinates_a_lng = 50.4501, 30.523
-        elif point_a == "Lviv":
-            cordinates_a_lat, cordinates_a_lng = 49.8397, 24.0297
-        elif point_a == "Odesa":
-            cordinates_a_lat, cordinates_a_lng = 46.4825, 30.7233
-        
-        if point_b == "Kyiv":
-            cordinates_b_lat, cordinates_b_lng = 50.4501, 30.523
-        elif point_b == "Lviv":
-            cordinates_b_lat, cordinates_b_lng = 49.8397, 24.0297
-        elif point_b == "Odesa":
-            cordinates_b_lat, cordinates_b_lng = 46.4825, 30.7233
-        
-        api_key = "AIzaSyAWCPvwtBP7nBBMKAUBg1BwZS_T2H_mpPc"
-
-        distance, time = plot_route(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng)
-
-        html_content = generate_html(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng)
-
-        # Check if there is an existing layout
-        if not self.mapWidget.layout():
-            layout = QVBoxLayout(self.mapWidget)
-            self.mapWidget.setLayout(layout)
+        if not driver_id:
+            QMessageBox.warning(self, "Input Error", "Please select a driver.")
+        elif not bus_id:
+            QMessageBox.warning(self, "Input Error", "Please select a bus.")
+        elif not point_a:
+            QMessageBox.warning(self, "Input Error", "Please select point A.")
+        elif not point_b:
+            QMessageBox.warning(self, "Input Error", "Please select point B.")
+        elif not start_date:
+            QMessageBox.warning(self, "Input Error", "Please select a start date.")
+        elif point_a == point_b:
+            QMessageBox.warning(self, "Input Error", "Point A and Point B cannot be the same.")
         else:
-            layout = self.mapWidget.layout()
+            print (driver_id, bus_id, point_a, point_b, start_date)
 
-        # Remove any existing QWebEngineView from the layout
-        for i in reversed(range(layout.count())):
-            widget_to_remove = layout.itemAt(i).widget()
-            if isinstance(widget_to_remove, QWebEngineView):
-                layout.removeWidget(widget_to_remove)
-                widget_to_remove.deleteLater()  # Safely delete the widget
+            if point_a == "Kyiv":
+                cordinates_a_lat, cordinates_a_lng = 50.4501, 30.523
+            elif point_a == "Lviv":
+                cordinates_a_lat, cordinates_a_lng = 49.8397, 24.0297
+            elif point_a == "Odesa":
+                cordinates_a_lat, cordinates_a_lng = 46.4825, 30.7233
+            
+            if point_b == "Kyiv":
+                cordinates_b_lat, cordinates_b_lng = 50.4501, 30.523
+            elif point_b == "Lviv":
+                cordinates_b_lat, cordinates_b_lng = 49.8397, 24.0297
+            elif point_b == "Odesa":
+                cordinates_b_lat, cordinates_b_lng = 46.4825, 30.7233
+            
+            api_key = "AIzaSyAWCPvwtBP7nBBMKAUBg1BwZS_T2H_mpPc"
 
-        # Create a new QWebEngineView instance
-        web_view = QWebEngineView()
+            distance, time = plot_route(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng)
 
-        # Load the dynamic HTML content into the QWebEngineView
-        buffer = QBuffer()
-        buffer.setData(QByteArray(html_content.encode()))
-        buffer.open(QIODevice.ReadOnly)
+            html_content = generate_html(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng)
 
-        web_view.setHtml(buffer.readAll().data().decode())
+            # Check if there is an existing layout
+            if not self.mapWidget.layout():
+                layout = QVBoxLayout(self.mapWidget)
+                self.mapWidget.setLayout(layout)
+            else:
+                layout = self.mapWidget.layout()
 
-        # Add the new QWebEngineView to the layout
-        layout.addWidget(web_view)
+            # Remove any existing QWebEngineView from the layout
+            for i in reversed(range(layout.count())):
+                widget_to_remove = layout.itemAt(i).widget()
+                if isinstance(widget_to_remove, QWebEngineView):
+                    layout.removeWidget(widget_to_remove)
+                    widget_to_remove.deleteLater()  # Safely delete the widget
+
+            # Create a new QWebEngineView instance
+            web_view = QWebEngineView()
+
+            # Load the dynamic HTML content into the QWebEngineView
+            buffer = QBuffer()
+            buffer.setData(QByteArray(html_content.encode()))
+            buffer.open(QIODevice.ReadOnly)
+
+            web_view.setHtml(buffer.readAll().data().decode())
+
+            # Add the new QWebEngineView to the layout
+            layout.addWidget(web_view)
+
+            add_route(bus_id, driver_id, start_date, distance, time, html_content)
+        
+
+        
 
 
 
