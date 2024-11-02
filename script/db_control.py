@@ -39,6 +39,7 @@ def create_db():
         conn.close()
 
 def load_bus():
+    create_db()
     conn = sqlite3.connect('bus_management.db')
     cursor = conn.cursor()
     cursor.execute("SELECT id, model, number_plate, mileage, service_due_to FROM Buses")
@@ -47,6 +48,7 @@ def load_bus():
     return rows
 
 def load_driver():
+    create_db()
     conn = sqlite3.connect('bus_management.db')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM Drivers")
@@ -55,6 +57,7 @@ def load_driver():
     return rows
 
 def load_route():
+    create_db()
     conn = sqlite3.connect('bus_management.db')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM Route")
@@ -63,6 +66,7 @@ def load_route():
     return rows
 
 def add_bus(model, number_plate, mileage, service_due_to):
+    create_db()
     conn = sqlite3.connect('bus_management.db')
     cursor = conn.cursor()
     cursor.execute('''
@@ -73,6 +77,7 @@ def add_bus(model, number_plate, mileage, service_due_to):
     conn.close()
 
 def add_driver(first_name, last_name, license_number, phone):
+    create_db()
     conn = sqlite3.connect('bus_management.db')
     cursor = conn.cursor()
     cursor.execute('''
@@ -83,6 +88,7 @@ def add_driver(first_name, last_name, license_number, phone):
     conn.close()
 
 def add_route(bus_id, driver_id, departure_date, distance, time, html_report):
+    create_db()
     conn = sqlite3.connect('bus_management.db')
     cursor = conn.cursor()
     cursor.execute('''
