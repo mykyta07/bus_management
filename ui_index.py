@@ -230,16 +230,16 @@ class Ui_MainWindow(object):
         self.routes_page.setObjectName(u"routes_page")
         self.label_5 = QLabel(self.routes_page)
         self.label_5.setObjectName(u"label_5")
-        self.label_5.setGeometry(QRect(10, 10, 171, 61))
+        self.label_5.setGeometry(QRect(10, 20, 171, 41))
         self.label_5.setStyleSheet(u"font: 75 16pt \"MS Shell Dlg 2\";")
         self.label_9 = QLabel(self.routes_page)
         self.label_9.setObjectName(u"label_9")
-        self.label_9.setGeometry(QRect(10, 60, 611, 21))
+        self.label_9.setGeometry(QRect(10, 60, 391, 21))
         self.label_9.setStyleSheet(u"font: 10pt \"MS Shell Dlg 2\";\n"
 "color: rgb(153, 153, 153);")
         self.mapWidget = QWidget(self.routes_page)
         self.mapWidget.setObjectName(u"mapWidget")
-        self.mapWidget.setGeometry(QRect(420, 80, 431, 611))
+        self.mapWidget.setGeometry(QRect(420, 100, 431, 591))
         self.splitter_2 = QSplitter(self.routes_page)
         self.splitter_2.setObjectName(u"splitter_2")
         self.splitter_2.setGeometry(QRect(10, 190, 381, 71))
@@ -287,7 +287,7 @@ class Ui_MainWindow(object):
         self.splitter_4.addWidget(self.comboBoxB)
         self.splitter_5 = QSplitter(self.routes_page)
         self.splitter_5.setObjectName(u"splitter_5")
-        self.splitter_5.setGeometry(QRect(10, 420, 381, 81))
+        self.splitter_5.setGeometry(QRect(10, 430, 381, 81))
         self.splitter_5.setOrientation(Qt.Vertical)
         self.label_10 = QLabel(self.splitter_5)
         self.label_10.setObjectName(u"label_10")
@@ -301,6 +301,7 @@ class Ui_MainWindow(object):
         self.splitter_5.addWidget(self.dateEdit)
         self.pushButtonRoute = QPushButton(self.routes_page)
         self.pushButtonRoute.setObjectName(u"pushButtonRoute")
+        self.pushButtonRoute.setEnabled(True)
         self.pushButtonRoute.setGeometry(QRect(100, 640, 231, 61))
         self.pushButtonRoute.setStyleSheet(u"border:\"none\";\n"
 "background-color: rgb(0, 255, 127);\n"
@@ -321,6 +322,16 @@ class Ui_MainWindow(object):
         self.comboBoxDriver.setStyleSheet(u"border:none;\n"
 "")
         self.splitter.addWidget(self.comboBoxDriver)
+        self.pushButtonWayPoints = QPushButton(self.routes_page)
+        self.pushButtonWayPoints.setObjectName(u"pushButtonWayPoints")
+        self.pushButtonWayPoints.setEnabled(True)
+        self.pushButtonWayPoints.setGeometry(QRect(0, 530, 391, 51))
+        self.pushButtonWayPoints.setStyleSheet(u"border:\"none\";\n"
+"background-color: rgb(230, 228, 227);\n"
+"font: 75 10pt \"MS Shell Dlg 2\";\n"
+"color: rgb(0, 0, 0);\n"
+"border-radius:\"10px\"")
+        self.pushButtonWayPoints.setCheckable(True)
         self.stackedWidget.addWidget(self.routes_page)
         self.drivers_page = QWidget()
         self.drivers_page.setObjectName(u"drivers_page")
@@ -418,12 +429,12 @@ class Ui_MainWindow(object):
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Create Route", None))
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"Welcome to the page for creating route", None))
         self.label_12.setText(QCoreApplication.translate("MainWindow", u"Bus", None))
-        self.label_13.setText(QCoreApplication.translate("MainWindow", u"Point A", None))
+        self.label_13.setText(QCoreApplication.translate("MainWindow", u"Start point", None))
         self.comboBoxA.setItemText(0, QCoreApplication.translate("MainWindow", u"Kyiv", None))
         self.comboBoxA.setItemText(1, QCoreApplication.translate("MainWindow", u"Odesa", None))
         self.comboBoxA.setItemText(2, QCoreApplication.translate("MainWindow", u"Lviv", None))
 
-        self.label_14.setText(QCoreApplication.translate("MainWindow", u"Point B", None))
+        self.label_14.setText(QCoreApplication.translate("MainWindow", u"Finish point", None))
         self.comboBoxB.setItemText(0, QCoreApplication.translate("MainWindow", u"Kyiv", None))
         self.comboBoxB.setItemText(1, QCoreApplication.translate("MainWindow", u"Odesa", None))
         self.comboBoxB.setItemText(2, QCoreApplication.translate("MainWindow", u"Lviv", None))
@@ -431,6 +442,7 @@ class Ui_MainWindow(object):
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"Start date", None))
         self.pushButtonRoute.setText(QCoreApplication.translate("MainWindow", u"Create ", None))
         self.label_11.setText(QCoreApplication.translate("MainWindow", u"Driver", None))
+        self.pushButtonWayPoints.setText(QCoreApplication.translate("MainWindow", u"Add way points", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Drivers info", None))
         self.label_8.setText(QCoreApplication.translate("MainWindow", u"Welocme to driver information page!", None))
         self.addDriverButton.setText(QCoreApplication.translate("MainWindow", u"Add driver", None))

@@ -411,9 +411,9 @@ border-radius:&quot;10px&quot;</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>10</y>
+         <y>20</y>
          <width>171</width>
-         <height>61</height>
+         <height>41</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -428,7 +428,7 @@ border-radius:&quot;10px&quot;</string>
         <rect>
          <x>10</x>
          <y>60</y>
-         <width>611</width>
+         <width>391</width>
          <height>21</height>
         </rect>
        </property>
@@ -444,9 +444,9 @@ color: rgb(153, 153, 153);</string>
        <property name="geometry">
         <rect>
          <x>420</x>
-         <y>80</y>
+         <y>100</y>
          <width>431</width>
-         <height>611</height>
+         <height>591</height>
         </rect>
        </property>
       </widget>
@@ -494,7 +494,7 @@ color: rgb(153, 153, 153);</string>
          <string notr="true">font: 75 14pt &quot;MS Shell Dlg 2&quot;;</string>
         </property>
         <property name="text">
-         <string>Point A</string>
+         <string>Start point</string>
         </property>
        </widget>
        <widget class="QComboBox" name="comboBoxA">
@@ -536,7 +536,7 @@ color: rgb(153, 153, 153);</string>
          <string notr="true">font: 75 14pt &quot;MS Shell Dlg 2&quot;;</string>
         </property>
         <property name="text">
-         <string>Point B</string>
+         <string>Finish point</string>
         </property>
        </widget>
        <widget class="QComboBox" name="comboBoxB">
@@ -565,7 +565,7 @@ color: rgb(153, 153, 153);</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>420</y>
+         <y>430</y>
          <width>381</width>
          <height>81</height>
         </rect>
@@ -666,6 +666,32 @@ border-radius:&quot;10px&quot;</string>
 </string>
         </property>
        </widget>
+      </widget>
+      <widget class="QPushButton" name="pushButtonWayPoints">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>530</y>
+         <width>391</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border:&quot;none&quot;;
+background-color: rgb(230, 228, 227);
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(0, 0, 0);
+border-radius:&quot;10px&quot;</string>
+       </property>
+       <property name="text">
+        <string>Add way points</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
       </widget>
      </widget>
      <widget class="QWidget" name="drivers_page">
