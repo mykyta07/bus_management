@@ -1,9 +1,13 @@
 import requests
 import json
 
-
-def get_route(api_key, start_lat, start_lng, end_lat, end_lng):
+def get_route(api_key, start_lat, start_lng, end_lat, end_lng, waypoints=None):
     url = "https://maps.googleapis.com/maps/api/directions/json"
+    
+    # Prepare the waypoints in the format required by Google Maps API
+    waypoints_param = None
+    if waypoints:
+        waypoints_param = '|'.join([f"{lat},{lng}" for lat, lng in waypoints])
     
     params = {
         'origin': f"{start_lat},{start_lng}",
@@ -12,6 +16,9 @@ def get_route(api_key, start_lat, start_lng, end_lat, end_lng):
         'language': 'en',
         'key': api_key
     }
+    
+    if waypoints_param:
+        params['waypoints'] = waypoints_param
     
     response = requests.get(url, params=params)
     
@@ -25,9 +32,12 @@ def get_route(api_key, start_lat, start_lng, end_lat, end_lng):
 
         if 'routes' in data and data['routes']:
             route = data['routes'][0]
-            leg = route['legs'][0]
-            distance = leg['distance']['value']
-            time = leg['duration']['value']
+            total_distance = 0
+            total_duration = 0
+            
+            for leg in route['legs']:
+                total_distance += leg['distance']['value']
+                total_duration += leg['duration']['value']
             
             if 'overview_polyline' in route:
                 encoded_points = route['overview_polyline']['points']
@@ -35,7 +45,7 @@ def get_route(api_key, start_lat, start_lng, end_lat, end_lng):
             else:
                 points = None
             
-            return distance, time, points
+            return total_distance, total_duration, points
         else:
             print("No route found.")
             return None, None, None
@@ -75,7 +85,6 @@ def decode_polyline(encoded):
 
     return points
 
-def plot_route(api_key, start_lat, start_lng, end_lat, end_lng):
-    distance, time, points = get_route(api_key, start_lat, start_lng, end_lat, end_lng)
-    return distance, time
-   
+def plot_route(api_key, start_lat, start_lng, end_lat, end_lng, waypoints=None):
+    distance, time, points = get_route(api_key, start_lat, start_lng, end_lat, end_lng, waypoints)
+    return distance, time, points
