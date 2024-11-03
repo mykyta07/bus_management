@@ -13,7 +13,7 @@ def create_db():
             )
         ''')
         cursor.execute('''
-            CREATE TABLE IF NOT EXISTS Driver (
+            CREATE TABLE IF NOT EXISTS Drivers (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 first_name TEXT,
                 last_name TEXT,
