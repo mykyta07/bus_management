@@ -7,9 +7,12 @@ from ui_index import Ui_MainWindow
 from components.busesDialogUpdate import Ui_busesDialogUpdate
 from components.driversDialog import Ui_driversDialog
 from components.driversDialogUpdate import Ui_driversDialogUpdate
+from components.CheckableComboBox import CheckableComboBox
+from components.multiSelectDialog import MultiSelectDialog
 from script.db_control import *
 from script.api import plot_route
 import sqlite3
+import requests
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -23,7 +26,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.addBusButton.clicked.connect(self.open_add_bus_dialog)
         self.addDriverButton.clicked.connect(self.open_add_driver_dialog)
         self.pushButtonRoute.clicked.connect(self.create_routes)
+        self.pushButtonWayPoints.clicked.connect(self.open_waypoints_dialog)
+        
+        selected_items = []
+
         self.load_buses_data()
+        self.load_driver_data()
+        self.init_db()
+
+
+
+        # # Initialize and add CheckableComboBox for waypoints
+        # waypoints = ["Kyiv", "Lviv", "Odesa"]
+        # checkbox = CheckableComboBox()
+        # checkbox.addItems(waypoints)
+        # checkbox.setPlaceholderText("Select waypoints")
+        # checkbox.setFixedWidth(200)  # Adjust the width as needed
+
+        # # Add comboBoxWayPoints to the layout
+        # self.layout().addWidget(checkbox)
+
+
+
 
     def switch_to_buses_page(self):
         print("Switching to buses page")
@@ -108,6 +132,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             driver_name = row[1] + ' ' + row[2]
             self.comboBoxDriver.addItem(driver_name, driver_id)
 
+    def open_waypoints_dialog(self):
+        dialog = MultiSelectDialog(["Kyiv", "Lviv", "Odesa"])
+        if dialog.exec() == QDialog.Accepted:
+            self.selected_items = dialog.get_selected_items()
+           
+
 
     def create_routes(self):
         load_bus()
@@ -118,7 +148,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         point_a = self.comboBoxA.currentText()
         point_b = self.comboBoxB.currentText()
         start_date = self.dateEdit.date().toString("yyyy-MM-dd")
-
+        way_points = []
+        
         if not driver_id:
             QMessageBox.warning(self, "Input Error", "Please select a driver.")
         elif not bus_id:
@@ -134,6 +165,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             print (driver_id, bus_id, point_a, point_b, start_date)
 
+            cities = self.selected_items
+            print (cities)
+            self.selected_items = []
+
             if point_a == "Kyiv":
                 cordinates_a_lat, cordinates_a_lng = 50.4501, 30.523
             elif point_a == "Lviv":
@@ -147,12 +182,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 cordinates_b_lat, cordinates_b_lng = 49.8397, 24.0297
             elif point_b == "Odesa":
                 cordinates_b_lat, cordinates_b_lng = 46.4825, 30.7233
+
+
+
+            for city in cities:
+                if city == "Kyiv":
+                    way_points.append([50.4501, 30.523])
+                elif city == "Lviv":
+                    way_points.append([49.8397, 24.0297])
+                elif city == "Odesa":
+                    way_points.append([46.4825, 30.7233])
             
             api_key = "AIzaSyAWCPvwtBP7nBBMKAUBg1BwZS_T2H_mpPc"
 
-            distance, time = plot_route(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng)
+            distance, time, points = plot_route(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng, way_points)
 
-            html_content = generate_html(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng)
+            # distance, time = get_route_info(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng, way_points)
+
+            html_content = generate_html(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng, way_points)
 
             # Check if there is an existing layout
             if not self.mapWidget.layout():
@@ -364,34 +411,42 @@ class DriversDialogUpdate(QDialog, Ui_driversDialogUpdate):
 
         self.accept()
 
-def generate_html(api_key, origin_lat, origin_lng, dest_lat, dest_lng):
-        html_content = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Google Maps Route</title>
-            <style>
-            html, body {{
-                height: 100%;
-                margin: 0;
-                padding: 0;
-            }}
-            iframe {{
-                width: 100%;
-                height: 100%;
-                border: 0;
-            }}
-            </style>
-        </head>
-        <body>
-            <iframe
-            width="100%"
-            height="100%"
-            frameborder="0" style="border:0"
-            src="https://www.google.com/maps/embed/v1/directions?key={api_key}&origin={origin_lat},{origin_lng}&destination={dest_lat},{dest_lng}&mode=driving&zoom=7"
-            allowfullscreen>
-            </iframe>
-        </body>
-        </html>
-        """
-        return html_content
+def generate_html(api_key, origin_lat, origin_lng, dest_lat, dest_lng, waypoints=None):
+
+    waypoints_param = ""
+    if waypoints:
+        waypoints_param = "&waypoints=" + "|".join([f"{lat},{lng}" for lat, lng in waypoints])
+
+
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Google Maps Route</title>
+        <style>
+        html, body {{
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }}
+        iframe {{
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }}
+        </style>
+    </head>
+    <body>
+        <iframe
+        width="100%"
+        height="100%"
+        frameborder="0" style="border:0"
+        src="https://www.google.com/maps/embed/v1/directions?key={api_key}&origin={origin_lat},{origin_lng}&destination={dest_lat},{dest_lng}&mode=driving{waypoints_param}&zoom=7"
+        allowfullscreen>
+        </iframe>
+    </body>
+    </html>
+    """
+    return html_content
+
+
