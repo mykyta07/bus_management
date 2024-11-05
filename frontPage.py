@@ -14,6 +14,8 @@ from script.api import plot_route
 import sqlite3
 import requests
 
+points = ["Kyiv", "Lviv", "Odesa", "Lutsk", "Zhytomyr"]
+
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -35,6 +37,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.init_db()
 
 
+        
+        self.comboBoxA.addItems(points)
+        self.comboBoxB.addItems(points)
+        self.comboBoxA.setCurrentText('Select start point')
+        self.comboBoxB.setCurrentText('Select finish point')
 
         # # Initialize and add CheckableComboBox for waypoints
         # waypoints = ["Kyiv", "Lviv", "Odesa"]
@@ -133,7 +140,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.comboBoxDriver.addItem(driver_name, driver_id)
 
     def open_waypoints_dialog(self):
-        dialog = MultiSelectDialog(["Kyiv", "Lviv", "Odesa"])
+        dialog = MultiSelectDialog(points)
         if dialog.exec() == QDialog.Accepted:
             self.selected_items = dialog.get_selected_items()
            
@@ -175,6 +182,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 cordinates_a_lat, cordinates_a_lng = 49.8397, 24.0297
             elif point_a == "Odesa":
                 cordinates_a_lat, cordinates_a_lng = 46.4825, 30.7233
+            elif point_a == "Lutsk":
+                cordinates_a_lat, cordinates_a_lng = 50.7472, 25.3254
+            elif point_a == "Zhytomyr":
+                cordinates_a_lat, cordinates_a_lng = 50.2547, 28.6587
             
             if point_b == "Kyiv":
                 cordinates_b_lat, cordinates_b_lng = 50.4501, 30.523
@@ -182,6 +193,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 cordinates_b_lat, cordinates_b_lng = 49.8397, 24.0297
             elif point_b == "Odesa":
                 cordinates_b_lat, cordinates_b_lng = 46.4825, 30.7233
+            elif point_b == "Lutsk":
+                cordinates_b_lat, cordinates_b_lng = 50.7472, 25.3254
+            elif point_b == "Zhytomyr":
+                cordinates_b_lat, cordinates_b_lng = 50.2547, 28.6587
 
 
 
@@ -192,6 +207,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     way_points.append([49.8397, 24.0297])
                 elif city == "Odesa":
                     way_points.append([46.4825, 30.7233])
+                elif city == "Lutsk":
+                    way_points.append([50.7472, 25.3254])
+                elif city == "Zhytomyr":
+                    way_points.append([50.2547, 28.6587])
             
             api_key = "AIzaSyAWCPvwtBP7nBBMKAUBg1BwZS_T2H_mpPc"
 
