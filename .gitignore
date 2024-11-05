@@ -1,6 +1,6 @@
 __pycache__
 components/__pycache__
 script/__pycache__
-bus_management.db
+*.db
 route_response.json
 *.txt
