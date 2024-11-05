@@ -28,6 +28,8 @@ def create_db():
             bus_id INTEGER,
             driver_id INTEGER,
             departure_date TEXT,
+            point_a TEXT,
+            point_b TEXT,
             distance REAL,
             time TEXT,
             html_report TEXT,
@@ -87,14 +89,14 @@ def add_driver(first_name, last_name, license_number, phone):
     conn.commit()
     conn.close()
 
-def add_route(bus_id, driver_id, departure_date, distance, time, html_report):
+def add_route(bus_id, driver_id, departure_date, point_a, point_b, distance, time, html_report):
     create_db()
     conn = sqlite3.connect('bus_management.db')
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO Route (bus_id, driver_id, departure_date, distance, time, html_report)
-        VALUES (?, ?, ?, ?, ?, ?)
-    ''', (bus_id, driver_id, departure_date, distance, time, html_report))
+        INSERT INTO Route (bus_id, driver_id, departure_date, point_a, point_b, distance, time, html_report)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (bus_id, driver_id, departure_date, point_a, point_b, distance, time, html_report))
     conn.commit()
     conn.close()
 

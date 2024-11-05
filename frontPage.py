@@ -199,7 +199,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 cordinates_b_lat, cordinates_b_lng = 50.2547, 28.6587
 
 
-
             for city in cities:
                 if city == "Kyiv":
                     way_points.append([50.4501, 30.523])
@@ -247,7 +246,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Add the new QWebEngineView to the layout
             layout.addWidget(web_view)
 
-            add_route(bus_id, driver_id, start_date, distance, time, html_content)
+            add_route(bus_id, driver_id, start_date, point_a, point_b, distance, time, html_content)
         
 
         
