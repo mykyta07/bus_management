@@ -29,31 +29,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.addDriverButton.clicked.connect(self.open_add_driver_dialog)
         self.pushButtonRoute.clicked.connect(self.create_routes)
         self.pushButtonWayPoints.clicked.connect(self.open_waypoints_dialog)
+
+        self.labelRoute.setText("Select start point --> Select finish point")
+        self.labelRoute.setStyleSheet("font-size: 20px; font-weight: bold; ")
         
-        selected_items = []
+        self.selected_items = []
 
         self.load_buses_data()
         self.load_driver_data()
         self.init_db()
 
-
-        
         self.comboBoxA.addItems(points)
         self.comboBoxB.addItems(points)
         self.comboBoxA.setCurrentText('Select start point')
         self.comboBoxB.setCurrentText('Select finish point')
 
-        # # Initialize and add CheckableComboBox for waypoints
-        # waypoints = ["Kyiv", "Lviv", "Odesa"]
-        # checkbox = CheckableComboBox()
-        # checkbox.addItems(waypoints)
-        # checkbox.setPlaceholderText("Select waypoints")
-        # checkbox.setFixedWidth(200)  # Adjust the width as needed
-
-        # # Add comboBoxWayPoints to the layout
-        # self.layout().addWidget(checkbox)
-
-
+        self.comboBoxA.currentIndexChanged.connect(self.route_label_changed)
+        self.comboBoxB.currentIndexChanged.connect(self.route_label_changed)
 
 
     def switch_to_buses_page(self):
@@ -115,7 +107,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def load_driver_data(self):
         rows = load_driver()
 
-        # Set column widths
         self.driverTable.setColumnWidth(0, 150)
         self.driverTable.setColumnWidth(1, 150)
         self.driverTable.setColumnWidth(2, 150)
@@ -143,8 +134,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         dialog = MultiSelectDialog(points)
         if dialog.exec() == QDialog.Accepted:
             self.selected_items = dialog.get_selected_items()
+            self.route_label_changed()
            
-
+    def route_label_changed(self):
+        waypoints_string = " "
+        if self.selected_items:
+            waypoints_string = f"--> {' --> '.join(self.selected_items)} "
+        labelText = f"{self.comboBoxA.currentText()} {waypoints_string} --> {self.comboBoxB.currentText()}"
+        self.labelRoute.setText(labelText)
+        print(labelText)
 
     def create_routes(self):
         load_bus()
@@ -156,26 +154,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         point_b = self.comboBoxB.currentText()
         start_date = self.dateEdit.date().toString("yyyy-MM-dd")
         way_points = []
-        
+
+
         if not driver_id:
             QMessageBox.warning(self, "Input Error", "Please select a driver.")
         elif not bus_id:
             QMessageBox.warning(self, "Input Error", "Please select a bus.")
         elif not point_a:
-            QMessageBox.warning(self, "Input Error", "Please select point A.")
+            QMessageBox.warning(self, "Input Error", "Please select start point.")
         elif not point_b:
-            QMessageBox.warning(self, "Input Error", "Please select point B.")
+            QMessageBox.warning(self, "Input Error", "Please select finish point.")
         elif not start_date:
             QMessageBox.warning(self, "Input Error", "Please select a start date.")
         elif point_a == point_b:
-            QMessageBox.warning(self, "Input Error", "Point A and Point B cannot be the same.")
+            QMessageBox.warning(self, "Input Error", "Start and Finish cannot be the same.")
         else:
-            print (driver_id, bus_id, point_a, point_b, start_date)
 
             cities = self.selected_items
-            print (cities)
             self.selected_items = []
 
+            
             if point_a == "Kyiv":
                 cordinates_a_lat, cordinates_a_lng = 50.4501, 30.523
             elif point_a == "Lviv":
@@ -215,28 +213,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             distance, time, points = plot_route(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng, way_points)
 
-            # distance, time = get_route_info(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng, way_points)
-
             html_content = generate_html(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng, way_points)
 
-            # Check if there is an existing layout
             if not self.mapWidget.layout():
                 layout = QVBoxLayout(self.mapWidget)
                 self.mapWidget.setLayout(layout)
             else:
                 layout = self.mapWidget.layout()
 
-            # Remove any existing QWebEngineView from the layout
             for i in reversed(range(layout.count())):
                 widget_to_remove = layout.itemAt(i).widget()
                 if isinstance(widget_to_remove, QWebEngineView):
                     layout.removeWidget(widget_to_remove)
                     widget_to_remove.deleteLater()  # Safely delete the widget
 
-            # Create a new QWebEngineView instance
             web_view = QWebEngineView()
 
-            # Load the dynamic HTML content into the QWebEngineView
             buffer = QBuffer()
             buffer.setData(QByteArray(html_content.encode()))
             buffer.open(QIODevice.ReadOnly)
