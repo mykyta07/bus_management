@@ -252,6 +252,7 @@ class Ui_MainWindow(object):
         self.comboBoxBus.setObjectName(u"comboBoxBus")
         self.comboBoxBus.setStyleSheet(u"border:none;\n"
 "")
+        self.comboBoxBus.setEditable(True)
         self.splitter_2.addWidget(self.comboBoxBus)
         self.splitter_3 = QSplitter(self.routes_page)
         self.splitter_3.setObjectName(u"splitter_3")
@@ -262,12 +263,11 @@ class Ui_MainWindow(object):
         self.label_13.setStyleSheet(u"font: 75 14pt \"MS Shell Dlg 2\";")
         self.splitter_3.addWidget(self.label_13)
         self.comboBoxA = QComboBox(self.splitter_3)
-        self.comboBoxA.addItem("")
-        self.comboBoxA.addItem("")
-        self.comboBoxA.addItem("")
         self.comboBoxA.setObjectName(u"comboBoxA")
         self.comboBoxA.setStyleSheet(u"border:none;\n"
 "")
+        self.comboBoxA.setEditable(True)
+        self.comboBoxA.setCurrentText(u"Select start point")
         self.splitter_3.addWidget(self.comboBoxA)
         self.splitter_4 = QSplitter(self.routes_page)
         self.splitter_4.setObjectName(u"splitter_4")
@@ -278,12 +278,10 @@ class Ui_MainWindow(object):
         self.label_14.setStyleSheet(u"font: 75 14pt \"MS Shell Dlg 2\";")
         self.splitter_4.addWidget(self.label_14)
         self.comboBoxB = QComboBox(self.splitter_4)
-        self.comboBoxB.addItem("")
-        self.comboBoxB.addItem("")
-        self.comboBoxB.addItem("")
         self.comboBoxB.setObjectName(u"comboBoxB")
         self.comboBoxB.setStyleSheet(u"border:none;\n"
 "")
+        self.comboBoxB.setEditable(True)
         self.splitter_4.addWidget(self.comboBoxB)
         self.splitter_5 = QSplitter(self.routes_page)
         self.splitter_5.setObjectName(u"splitter_5")
@@ -321,6 +319,7 @@ class Ui_MainWindow(object):
         self.comboBoxDriver.setObjectName(u"comboBoxDriver")
         self.comboBoxDriver.setStyleSheet(u"border:none;\n"
 "")
+        self.comboBoxDriver.setEditable(True)
         self.splitter.addWidget(self.comboBoxDriver)
         self.pushButtonWayPoints = QPushButton(self.routes_page)
         self.pushButtonWayPoints.setObjectName(u"pushButtonWayPoints")
@@ -402,6 +401,9 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
+        self.comboBoxA.setCurrentIndex(-1)
+
+
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
 
@@ -429,19 +431,14 @@ class Ui_MainWindow(object):
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Create Route", None))
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"Welcome to the page for creating route", None))
         self.label_12.setText(QCoreApplication.translate("MainWindow", u"Bus", None))
+        self.comboBoxBus.setCurrentText(QCoreApplication.translate("MainWindow", u"Select bus", None))
         self.label_13.setText(QCoreApplication.translate("MainWindow", u"Start point", None))
-        self.comboBoxA.setItemText(0, QCoreApplication.translate("MainWindow", u"Kyiv", None))
-        self.comboBoxA.setItemText(1, QCoreApplication.translate("MainWindow", u"Odesa", None))
-        self.comboBoxA.setItemText(2, QCoreApplication.translate("MainWindow", u"Lviv", None))
-
         self.label_14.setText(QCoreApplication.translate("MainWindow", u"Finish point", None))
-        self.comboBoxB.setItemText(0, QCoreApplication.translate("MainWindow", u"Kyiv", None))
-        self.comboBoxB.setItemText(1, QCoreApplication.translate("MainWindow", u"Odesa", None))
-        self.comboBoxB.setItemText(2, QCoreApplication.translate("MainWindow", u"Lviv", None))
-
+        self.comboBoxB.setCurrentText(QCoreApplication.translate("MainWindow", u"Select current point", None))
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"Start date", None))
         self.pushButtonRoute.setText(QCoreApplication.translate("MainWindow", u"Create ", None))
         self.label_11.setText(QCoreApplication.translate("MainWindow", u"Driver", None))
+        self.comboBoxDriver.setCurrentText(QCoreApplication.translate("MainWindow", u"Select driver", None))
         self.pushButtonWayPoints.setText(QCoreApplication.translate("MainWindow", u"Add way points", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Drivers info", None))
         self.label_8.setText(QCoreApplication.translate("MainWindow", u"Welocme to driver information page!", None))
