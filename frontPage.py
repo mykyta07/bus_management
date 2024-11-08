@@ -15,6 +15,9 @@ import requests
 
 points = ["Kyiv", "Lviv", "Odesa", "Lutsk", "Zhytomyr"]
 
+with open("key.txt", "r") as file:
+    api_key = file.read().strip()
+
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -208,7 +211,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 elif city == "Zhytomyr":
                     way_points.append([50.2547, 28.6587])
             
-            api_key = "AIzaSyAWCPvwtBP7nBBMKAUBg1BwZS_T2H_mpPc"
+            # api_key = "AIzaSyAWCPvwtBP7nBBMKAUBg1BwZS_T2H_mpPc"
 
             distance, time, points = plot_route(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng, way_points)
 
