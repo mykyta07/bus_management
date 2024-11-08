@@ -7,7 +7,6 @@ from ui_index import Ui_MainWindow
 from components.busesDialogUpdate import Ui_busesDialogUpdate
 from components.driversDialog import Ui_driversDialog
 from components.driversDialogUpdate import Ui_driversDialogUpdate
-from components.CheckableComboBox import CheckableComboBox
 from components.multiSelectDialog import MultiSelectDialog
 from script.db_control import *
 from script.api import plot_route
