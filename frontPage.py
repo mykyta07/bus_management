@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt, Signal, QDate, QUrl, QBuffer, QByteArray, QIODevice
+from PySide6.QtCore import Qt, Signal, QDate, QUrl, QBuffer, QByteArray, QIODevice, QDateTime
 from PySide6.QtWidgets import QMainWindow, QMenu, QWidget,  QTableWidgetItem, QDialog, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWebEngineWidgets import QWebEngineView
@@ -15,7 +15,7 @@ import requests
 
 points = ["Kyiv", "Lviv", "Odesa", "Lutsk", "Zhytomyr"]
 
-today_date = QDate.currentDate()
+current_date_time = QDateTime.currentDateTime()
 
 with open("key.txt", "r") as file:
     api_key = file.read().strip()
@@ -34,8 +34,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButtonRoute.clicked.connect(self.create_routes)
         self.pushButtonWayPoints.clicked.connect(self.open_waypoints_dialog)
 
-        self.dateEdit.setDate(today_date.addDays(10))
-        self.dateEdit.setMinimumDate(today_date)
+        self.dateTimeEdit.setDateTime(current_date_time.addDays(10))
+        self.dateTimeEdit.setMinimumDateTime(current_date_time)
 
         self.labelRoute.setText("Select start point --> Select finish point")
         self.labelRoute.setStyleSheet("font-size: 20px; font-weight: bold; ")
@@ -159,7 +159,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         bus_id = self.comboBoxBus.currentData()
         point_a = self.comboBoxA.currentText()
         point_b = self.comboBoxB.currentText()
-        start_date = self.dateEdit.date().toString("yyyy-MM-dd")
+        start_date = self.dateTimeEdit.dateTime().toString("yyyy-MM-dd HH:mm:ss")
         way_points = []
 
 
@@ -219,6 +219,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             distance, time, points = plot_route(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng, way_points)
 
+            arraival_date = self.dateTimeEdit.dateTime().addSecs(time).toString("yyyy-MM-dd HH:mm:ss")
+
             html_content = generate_html(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng, way_points)
 
             if not self.mapWidget.layout():
@@ -243,7 +245,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             layout.addWidget(web_view)
 
-            add_route(bus_id, driver_id, start_date, point_a, point_b, distance, time, html_content)
+            add_route(bus_id, driver_id, start_date, arraival_date, point_a, point_b, distance, time, html_content)
         
 
         

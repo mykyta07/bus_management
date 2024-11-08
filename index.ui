@@ -512,7 +512,7 @@ color: rgb(153, 153, 153);</string>
          <bool>true</bool>
         </property>
         <property name="currentText">
-         <string notr="true">Select start point</string>
+         <string notr="true"/>
         </property>
         <property name="currentIndex">
          <number>-1</number>
@@ -541,67 +541,13 @@ color: rgb(153, 153, 153);</string>
        </widget>
        <widget class="QComboBox" name="comboBoxB">
         <property name="styleSheet">
-         <string notr="true">border:none;
-</string>
+         <string notr="true">border:none;</string>
         </property>
         <property name="editable">
          <bool>true</bool>
         </property>
         <property name="currentText">
          <string>Select current point</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QSplitter" name="splitter_5">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>430</y>
-         <width>381</width>
-         <height>81</height>
-        </rect>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <widget class="QLabel" name="label_10">
-        <property name="styleSheet">
-         <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
-        </property>
-        <property name="text">
-         <string>Start date</string>
-        </property>
-       </widget>
-       <widget class="QDateEdit" name="dateEdit">
-        <property name="dateTime">
-         <datetime>
-          <hour>0</hour>
-          <minute>0</minute>
-          <second>0</second>
-          <year>2024</year>
-          <month>9</month>
-          <day>14</day>
-         </datetime>
-        </property>
-        <property name="maximumDateTime">
-         <datetime>
-          <hour>23</hour>
-          <minute>59</minute>
-          <second>59</second>
-          <year>2025</year>
-          <month>12</month>
-          <day>31</day>
-         </datetime>
-        </property>
-        <property name="minimumDateTime">
-         <datetime>
-          <hour>0</hour>
-          <minute>0</minute>
-          <second>0</second>
-          <year>2024</year>
-          <month>9</month>
-          <day>14</day>
-         </datetime>
         </property>
        </widget>
       </widget>
@@ -718,6 +664,28 @@ border-radius:&quot;10px&quot;</string>
        <property name="text">
         <string>Current route</string>
        </property>
+      </widget>
+      <widget class="QSplitter" name="splitter_5">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>430</y>
+         <width>381</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <widget class="QLabel" name="label_10">
+        <property name="styleSheet">
+         <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
+        </property>
+        <property name="text">
+         <string>Start date</string>
+        </property>
+       </widget>
+       <widget class="QDateTimeEdit" name="dateTimeEdit"/>
       </widget>
      </widget>
      <widget class="QWidget" name="drivers_page">
