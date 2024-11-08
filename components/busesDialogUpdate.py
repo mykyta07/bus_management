@@ -19,6 +19,8 @@ from PySide6.QtWidgets import (QApplication, QDateEdit, QDialog, QFrame,
     QLabel, QLineEdit, QPushButton, QSizePolicy,
     QSpinBox, QSplitter, QWidget)
 
+today_date = QDate.currentDate()
+
 class Ui_busesDialogUpdate(object):
     def setupUi(self, busesDialogUpdate):
         if not busesDialogUpdate.objectName():
@@ -86,7 +88,7 @@ class Ui_busesDialogUpdate(object):
         self.splitter_4.addWidget(self.label_5)
         self.dateEdit = QDateEdit(self.splitter_4)
         self.dateEdit.setObjectName(u"dateEdit")
-        self.dateEdit.setDateTime(QDateTime(QDate(2024, 9, 14), QTime(0, 0, 0)))
+        self.dateEdit.setDateTime(QDateTime(today_date.addDays(10), QTime(0, 0, 0)))
         self.dateEdit.setMaximumDateTime(QDateTime(QDate(2025, 12, 31), QTime(23, 59, 59)))
         self.dateEdit.setMinimumDateTime(QDateTime(QDate(2024, 9, 14), QTime(0, 0, 0)))
         self.splitter_4.addWidget(self.dateEdit)

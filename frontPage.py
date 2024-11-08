@@ -15,6 +15,8 @@ import requests
 
 points = ["Kyiv", "Lviv", "Odesa", "Lutsk", "Zhytomyr"]
 
+today_date = QDate.currentDate()
+
 with open("key.txt", "r") as file:
     api_key = file.read().strip()
 
@@ -31,6 +33,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.addDriverButton.clicked.connect(self.open_add_driver_dialog)
         self.pushButtonRoute.clicked.connect(self.create_routes)
         self.pushButtonWayPoints.clicked.connect(self.open_waypoints_dialog)
+
+        self.dateEdit.setDate(today_date.addDays(10))
+        self.dateEdit.setMinimumDate(today_date)
 
         self.labelRoute.setText("Select start point --> Select finish point")
         self.labelRoute.setStyleSheet("font-size: 20px; font-weight: bold; ")
@@ -211,7 +216,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 elif city == "Zhytomyr":
                     way_points.append([50.2547, 28.6587])
             
-            # api_key = "AIzaSyAWCPvwtBP7nBBMKAUBg1BwZS_T2H_mpPc"
 
             distance, time, points = plot_route(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng, way_points)
 
@@ -227,7 +231,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 widget_to_remove = layout.itemAt(i).widget()
                 if isinstance(widget_to_remove, QWebEngineView):
                     layout.removeWidget(widget_to_remove)
-                    widget_to_remove.deleteLater()  # Safely delete the widget
+                    widget_to_remove.deleteLater()  
 
             web_view = QWebEngineView()
 
@@ -237,7 +241,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             web_view.setHtml(buffer.readAll().data().decode())
 
-            # Add the new QWebEngineView to the layout
             layout.addWidget(web_view)
 
             add_route(bus_id, driver_id, start_date, point_a, point_b, distance, time, html_content)
