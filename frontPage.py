@@ -221,6 +221,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             arraival_date = self.dateTimeEdit.dateTime().addSecs(time).toString("yyyy-MM-dd HH:mm:ss")
 
+            if is_driver_busy(driver_id, start_date, arraival_date):
+                QMessageBox.warning(self, "Scheduling Error", "The selected driver is already assigned to a route in this period.")
+                return
+            if is_bus_busy(bus_id, start_date, arraival_date):
+                QMessageBox.warning(self, "Scheduling Error", "The selected bus is already assigned to a route in this period.")
+                return
+
             html_content = generate_html(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng, way_points)
 
             if not self.mapWidget.layout():
