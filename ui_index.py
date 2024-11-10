@@ -15,10 +15,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QDateTimeEdit, QHeaderView,
-    QLabel, QLineEdit, QMainWindow, QPushButton,
-    QSizePolicy, QSplitter, QStackedWidget, QTableWidget,
-    QTableWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCalendarWidget, QComboBox, QDateTimeEdit,
+    QHeaderView, QLabel, QLineEdit, QMainWindow,
+    QPushButton, QSizePolicy, QSplitter, QStackedWidget,
+    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
 import resources_rc
 
 class Ui_MainWindow(object):
@@ -40,10 +40,35 @@ class Ui_MainWindow(object):
 "color: rgb(255, 255, 255);")
         self.layoutWidget = QWidget(self.sidebar_menu)
         self.layoutWidget.setObjectName(u"layoutWidget")
-        self.layoutWidget.setGeometry(QRect(0, 120, 241, 211))
+        self.layoutWidget.setGeometry(QRect(0, 120, 241, 281))
         self.verticalLayout = QVBoxLayout(self.layoutWidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.schedule_button = QPushButton(self.layoutWidget)
+        self.schedule_button.setObjectName(u"schedule_button")
+        self.schedule_button.setEnabled(True)
+        self.schedule_button.setStyleSheet(u"QPushButton:checked{\n"
+"	background-color:white;\n"
+"	color:black;\n"
+"}\n"
+"QPushButton{\n"
+"color: rgb(255, 255, 255);\n"
+"font: 14pt \"MS Shell Dlg 2\";\n"
+"border: none;\n"
+"border-radius: 10px;\n"
+"margin-left: 10px;\n"
+"margin-right:10px;\n"
+"}\n"
+"")
+        icon = QIcon()
+        icon.addFile(u":/icons/calendar-10-32.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.schedule_button.setIcon(icon)
+        self.schedule_button.setIconSize(QSize(30, 30))
+        self.schedule_button.setCheckable(True)
+        self.schedule_button.setAutoExclusive(True)
+
+        self.verticalLayout.addWidget(self.schedule_button)
+
         self.routes_button = QPushButton(self.layoutWidget)
         self.routes_button.setObjectName(u"routes_button")
         self.routes_button.setStyleSheet(u"QPushButton:checked{\n"
@@ -59,9 +84,9 @@ class Ui_MainWindow(object):
 "margin-right:10px;\n"
 "}\n"
 "")
-        icon = QIcon()
-        icon.addFile(u":/icons/point-objects-32.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.routes_button.setIcon(icon)
+        icon1 = QIcon()
+        icon1.addFile(u":/icons/point-objects-32.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.routes_button.setIcon(icon1)
         self.routes_button.setIconSize(QSize(30, 30))
         self.routes_button.setCheckable(True)
         self.routes_button.setAutoExclusive(True)
@@ -83,9 +108,9 @@ class Ui_MainWindow(object):
 "margin-right:10px;\n"
 "}\n"
 "")
-        icon1 = QIcon()
-        icon1.addFile(u":/icons/bus-32.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.bus_button.setIcon(icon1)
+        icon2 = QIcon()
+        icon2.addFile(u":/icons/bus-32.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.bus_button.setIcon(icon2)
         self.bus_button.setIconSize(QSize(30, 30))
         self.bus_button.setCheckable(True)
         self.bus_button.setAutoExclusive(True)
@@ -108,9 +133,9 @@ class Ui_MainWindow(object):
 "margin-right:10px;\n"
 "}\n"
 "")
-        icon2 = QIcon()
-        icon2.addFile(u":/icons/user-32.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.drivers_button.setIcon(icon2)
+        icon3 = QIcon()
+        icon3.addFile(u":/icons/user-32.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.drivers_button.setIcon(icon3)
         self.drivers_button.setIconSize(QSize(30, 30))
         self.drivers_button.setCheckable(True)
         self.drivers_button.setAutoExclusive(True)
@@ -139,9 +164,9 @@ class Ui_MainWindow(object):
 "margin-right:10px;\n"
 "}\n"
 "")
-        icon3 = QIcon()
-        icon3.addFile(u":/icons/settings-4-32.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.settings_button.setIcon(icon3)
+        icon4 = QIcon()
+        icon4.addFile(u":/icons/settings-4-32.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.settings_button.setIcon(icon4)
         self.settings_button.setIconSize(QSize(30, 30))
         self.settings_button.setCheckable(True)
         self.settings_button.setAutoExclusive(True)
@@ -164,9 +189,9 @@ class Ui_MainWindow(object):
 "margin-right:10px;\n"
 "}\n"
 "")
-        icon4 = QIcon()
-        icon4.addFile(u":/icons/door-8-24.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.exit_button.setIcon(icon4)
+        icon5 = QIcon()
+        icon5.addFile(u":/icons/door-8-24.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.exit_button.setIcon(icon5)
         self.exit_button.setIconSize(QSize(30, 30))
         self.exit_button.setCheckable(True)
         self.exit_button.setAutoExclusive(True)
@@ -180,7 +205,7 @@ class Ui_MainWindow(object):
 "background-color: rgb(255, 255, 255);")
         self.stackedWidget = QStackedWidget(self.main_screen)
         self.stackedWidget.setObjectName(u"stackedWidget")
-        self.stackedWidget.setGeometry(QRect(10, 0, 851, 711))
+        self.stackedWidget.setGeometry(QRect(10, 10, 851, 711))
         self.buses_page = QWidget()
         self.buses_page.setObjectName(u"buses_page")
         self.label_4 = QLabel(self.buses_page)
@@ -335,6 +360,36 @@ class Ui_MainWindow(object):
         self.dateTimeEdit.setObjectName(u"dateTimeEdit")
         self.splitter_5.addWidget(self.dateTimeEdit)
         self.stackedWidget.addWidget(self.routes_page)
+        self.schedule_page = QWidget()
+        self.schedule_page.setObjectName(u"schedule_page")
+        self.scheduleTable = QTableWidget(self.schedule_page)
+        if (self.scheduleTable.columnCount() < 5):
+            self.scheduleTable.setColumnCount(5)
+        __qtablewidgetitem5 = QTableWidgetItem()
+        self.scheduleTable.setHorizontalHeaderItem(0, __qtablewidgetitem5)
+        __qtablewidgetitem6 = QTableWidgetItem()
+        self.scheduleTable.setHorizontalHeaderItem(1, __qtablewidgetitem6)
+        __qtablewidgetitem7 = QTableWidgetItem()
+        self.scheduleTable.setHorizontalHeaderItem(2, __qtablewidgetitem7)
+        __qtablewidgetitem8 = QTableWidgetItem()
+        self.scheduleTable.setHorizontalHeaderItem(3, __qtablewidgetitem8)
+        __qtablewidgetitem9 = QTableWidgetItem()
+        self.scheduleTable.setHorizontalHeaderItem(4, __qtablewidgetitem9)
+        self.scheduleTable.setObjectName(u"scheduleTable")
+        self.scheduleTable.setGeometry(QRect(0, 310, 851, 401))
+        self.label_15 = QLabel(self.schedule_page)
+        self.label_15.setObjectName(u"label_15")
+        self.label_15.setGeometry(QRect(370, 0, 121, 41))
+        self.label_15.setStyleSheet(u"font: 75 16pt \"MS Shell Dlg 2\";")
+        self.calendarWidget = QCalendarWidget(self.schedule_page)
+        self.calendarWidget.setObjectName(u"calendarWidget")
+        self.calendarWidget.setGeometry(QRect(10, 50, 381, 241))
+        self.calendarWidget.setGridVisible(False)
+        self.calendarWidget.setHorizontalHeaderFormat(QCalendarWidget.SingleLetterDayNames)
+        self.calendarWidget.setVerticalHeaderFormat(QCalendarWidget.NoVerticalHeader)
+        self.calendarWidget.setNavigationBarVisible(True)
+        self.calendarWidget.setDateEditEnabled(True)
+        self.stackedWidget.addWidget(self.schedule_page)
         self.drivers_page = QWidget()
         self.drivers_page.setObjectName(u"drivers_page")
         self.label_6 = QLabel(self.drivers_page)
@@ -359,16 +414,16 @@ class Ui_MainWindow(object):
         self.driverTable = QTableWidget(self.drivers_page)
         if (self.driverTable.columnCount() < 5):
             self.driverTable.setColumnCount(5)
-        __qtablewidgetitem5 = QTableWidgetItem()
-        self.driverTable.setHorizontalHeaderItem(0, __qtablewidgetitem5)
-        __qtablewidgetitem6 = QTableWidgetItem()
-        self.driverTable.setHorizontalHeaderItem(1, __qtablewidgetitem6)
-        __qtablewidgetitem7 = QTableWidgetItem()
-        self.driverTable.setHorizontalHeaderItem(2, __qtablewidgetitem7)
-        __qtablewidgetitem8 = QTableWidgetItem()
-        self.driverTable.setHorizontalHeaderItem(3, __qtablewidgetitem8)
-        __qtablewidgetitem9 = QTableWidgetItem()
-        self.driverTable.setHorizontalHeaderItem(4, __qtablewidgetitem9)
+        __qtablewidgetitem10 = QTableWidgetItem()
+        self.driverTable.setHorizontalHeaderItem(0, __qtablewidgetitem10)
+        __qtablewidgetitem11 = QTableWidgetItem()
+        self.driverTable.setHorizontalHeaderItem(1, __qtablewidgetitem11)
+        __qtablewidgetitem12 = QTableWidgetItem()
+        self.driverTable.setHorizontalHeaderItem(2, __qtablewidgetitem12)
+        __qtablewidgetitem13 = QTableWidgetItem()
+        self.driverTable.setHorizontalHeaderItem(3, __qtablewidgetitem13)
+        __qtablewidgetitem14 = QTableWidgetItem()
+        self.driverTable.setHorizontalHeaderItem(4, __qtablewidgetitem14)
         self.driverTable.setObjectName(u"driverTable")
         self.driverTable.setGeometry(QRect(0, 140, 851, 571))
         self.driverTable.setStyleSheet(u"QHeaderView::section {\n"
@@ -404,6 +459,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
+        self.stackedWidget.setCurrentIndex(2)
         self.comboBoxA.setCurrentIndex(-1)
 
 
@@ -413,6 +469,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Bus Managment", None))
+        self.schedule_button.setText(QCoreApplication.translate("MainWindow", u"Schedule", None))
         self.routes_button.setText(QCoreApplication.translate("MainWindow", u"Routes", None))
         self.bus_button.setText(QCoreApplication.translate("MainWindow", u"Buses", None))
         self.drivers_button.setText(QCoreApplication.translate("MainWindow", u"Drivers", None))
@@ -445,19 +502,30 @@ class Ui_MainWindow(object):
         self.labelRoute.setText("")
         self.labelCurrentLabel.setText(QCoreApplication.translate("MainWindow", u"Current route", None))
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"Start date", None))
+        ___qtablewidgetitem5 = self.scheduleTable.horizontalHeaderItem(0)
+        ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"From", None));
+        ___qtablewidgetitem6 = self.scheduleTable.horizontalHeaderItem(1)
+        ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"To", None));
+        ___qtablewidgetitem7 = self.scheduleTable.horizontalHeaderItem(2)
+        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"Departure", None));
+        ___qtablewidgetitem8 = self.scheduleTable.horizontalHeaderItem(3)
+        ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"Arraival time", None));
+        ___qtablewidgetitem9 = self.scheduleTable.horizontalHeaderItem(4)
+        ___qtablewidgetitem9.setText(QCoreApplication.translate("MainWindow", u"Actions", None));
+        self.label_15.setText(QCoreApplication.translate("MainWindow", u"Schedule", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Drivers info", None))
         self.label_8.setText(QCoreApplication.translate("MainWindow", u"Welocme to driver information page!", None))
         self.addDriverButton.setText(QCoreApplication.translate("MainWindow", u"Add driver", None))
-        ___qtablewidgetitem5 = self.driverTable.horizontalHeaderItem(0)
-        ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"First Name", None));
-        ___qtablewidgetitem6 = self.driverTable.horizontalHeaderItem(1)
-        ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"Second Name", None));
-        ___qtablewidgetitem7 = self.driverTable.horizontalHeaderItem(2)
-        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"License number", None));
-        ___qtablewidgetitem8 = self.driverTable.horizontalHeaderItem(3)
-        ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"Phone", None));
-        ___qtablewidgetitem9 = self.driverTable.horizontalHeaderItem(4)
-        ___qtablewidgetitem9.setText(QCoreApplication.translate("MainWindow", u"Actions", None));
+        ___qtablewidgetitem10 = self.driverTable.horizontalHeaderItem(0)
+        ___qtablewidgetitem10.setText(QCoreApplication.translate("MainWindow", u"First Name", None));
+        ___qtablewidgetitem11 = self.driverTable.horizontalHeaderItem(1)
+        ___qtablewidgetitem11.setText(QCoreApplication.translate("MainWindow", u"Second Name", None));
+        ___qtablewidgetitem12 = self.driverTable.horizontalHeaderItem(2)
+        ___qtablewidgetitem12.setText(QCoreApplication.translate("MainWindow", u"License number", None));
+        ___qtablewidgetitem13 = self.driverTable.horizontalHeaderItem(3)
+        ___qtablewidgetitem13.setText(QCoreApplication.translate("MainWindow", u"Phone", None));
+        ___qtablewidgetitem14 = self.driverTable.horizontalHeaderItem(4)
+        ___qtablewidgetitem14.setText(QCoreApplication.translate("MainWindow", u"Actions", None));
         self.lineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Search...", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Hi, Admin!", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Welcome to Bus Managment", None))

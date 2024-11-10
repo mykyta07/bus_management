@@ -50,10 +50,51 @@ color: rgb(255, 255, 255);</string>
        <x>0</x>
        <y>120</y>
        <width>241</width>
-       <height>211</height>
+       <height>281</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QPushButton" name="schedule_button">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:checked{
+	background-color:white;
+	color:black;
+}
+QPushButton{
+color: rgb(255, 255, 255);
+font: 14pt &quot;MS Shell Dlg 2&quot;;
+border: none;
+border-radius: 10px;
+margin-left: 10px;
+margin-right:10px;
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Schedule</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resources.qrc">
+          <normaloff>:/icons/calendar-10-32.png</normaloff>:/icons/calendar-10-32.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QPushButton" name="routes_button">
         <property name="styleSheet">
@@ -285,10 +326,13 @@ background-color: rgb(255, 255, 255);</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>0</y>
+       <y>10</y>
        <width>851</width>
        <height>711</height>
       </rect>
+     </property>
+     <property name="currentIndex">
+      <number>2</number>
      </property>
      <widget class="QWidget" name="buses_page">
       <widget class="QLabel" name="label_4">
@@ -686,6 +730,84 @@ border-radius:&quot;10px&quot;</string>
         </property>
        </widget>
        <widget class="QDateTimeEdit" name="dateTimeEdit"/>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="schedule_page">
+      <widget class="QTableWidget" name="scheduleTable">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>310</y>
+         <width>851</width>
+         <height>401</height>
+        </rect>
+       </property>
+       <column>
+        <property name="text">
+         <string>From</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>To</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Departure</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Arraival time</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Actions</string>
+        </property>
+       </column>
+      </widget>
+      <widget class="QLabel" name="label_15">
+       <property name="geometry">
+        <rect>
+         <x>370</x>
+         <y>0</y>
+         <width>121</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 75 16pt &quot;MS Shell Dlg 2&quot;;</string>
+       </property>
+       <property name="text">
+        <string>Schedule</string>
+       </property>
+      </widget>
+      <widget class="QCalendarWidget" name="calendarWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>381</width>
+         <height>241</height>
+        </rect>
+       </property>
+       <property name="gridVisible">
+        <bool>false</bool>
+       </property>
+       <property name="horizontalHeaderFormat">
+        <enum>QCalendarWidget::SingleLetterDayNames</enum>
+       </property>
+       <property name="verticalHeaderFormat">
+        <enum>QCalendarWidget::NoVerticalHeader</enum>
+       </property>
+       <property name="navigationBarVisible">
+        <bool>true</bool>
+       </property>
+       <property name="dateEditEnabled">
+        <bool>true</bool>
+       </property>
       </widget>
      </widget>
      <widget class="QWidget" name="drivers_page">
