@@ -8,10 +8,12 @@ from components.busesDialogUpdate import Ui_busesDialogUpdate
 from components.driversDialog import Ui_driversDialog
 from components.driversDialogUpdate import Ui_driversDialogUpdate
 from components.multiSelectDialog import MultiSelectDialog
+from components.routeInfoDialog import Ui_Dialog as routeInfoDialog
 from script.db_control import *
 from script.api import plot_route
 import sqlite3
 import requests
+import json
 
 points = ["Kyiv", "Lviv", "Odesa", "Lutsk", "Zhytomyr"]
 
@@ -33,6 +35,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.addDriverButton.clicked.connect(self.open_add_driver_dialog)
         self.pushButtonRoute.clicked.connect(self.create_routes)
         self.pushButtonWayPoints.clicked.connect(self.open_waypoints_dialog)
+        self.schedule_button.clicked.connect(self.switch_to_schedule_page)
 
         self.dateTimeEdit.setDateTime(current_date_time.addDays(10))
         self.dateTimeEdit.setMinimumDateTime(current_date_time)
@@ -44,6 +47,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.load_buses_data()
         self.load_driver_data()
+        self.load_route_data()
         self.init_db()
 
         self.comboBoxA.addItems(points)
@@ -66,8 +70,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     
     def switch_to_drivers_page(self):
         print("Switching to drivers page")
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(3)
         self.load_driver_data()
+
+    def switch_to_schedule_page(self):
+        print("Switching to schedule page")
+        self.stackedWidget.setCurrentIndex(2)
+        self.load_route_data()
 
     def open_add_bus_dialog(self):
         dialog = BusesDialog(self)
@@ -137,6 +146,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             driver_name = row[1] + ' ' + row[2]
             self.comboBoxDriver.addItem(driver_name, driver_id)
 
+    def load_route_data(self):
+
+        self.scheduleTable.setColumnWidth(0, 150)
+        self.scheduleTable.setColumnWidth(1, 150)
+        self.scheduleTable.setColumnWidth(2, 150)
+        self.scheduleTable.setColumnWidth(3, 150)
+        self.scheduleTable.setColumnWidth(4, 150)
+
+        rows = load_schedule()
+
+        self.scheduleTable.setRowCount(len(rows))
+        for row_idx, row_data in enumerate(rows):
+            for col_idx, col_data in enumerate(row_data[1:]):
+                self.scheduleTable.setItem(row_idx, col_idx, QTableWidgetItem(str(col_data)))
+
+                double_button_widget = DoubleButtonWidgetRoute(row_idx, row_data)
+                double_button_widget.info_clicked.connect(self.load_route_data)
+                double_button_widget.delete_clicked.connect(self.load_route_data)
+                self.scheduleTable.setCellWidget(row_idx, 4, double_button_widget)
+
     def open_waypoints_dialog(self):
         dialog = MultiSelectDialog(points)
         if dialog.exec() == QDialog.Accepted:
@@ -159,7 +188,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         bus_id = self.comboBoxBus.currentData()
         point_a = self.comboBoxA.currentText()
         point_b = self.comboBoxB.currentText()
-        start_date = self.dateTimeEdit.dateTime().toString("yyyy-MM-dd HH:mm:ss")
+        start_date = self.dateTimeEdit.dateTime().toString("yyyy-MM-dd HH:mm")
         way_points = []
 
 
@@ -219,7 +248,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             distance, time, points = plot_route(api_key, cordinates_a_lat, cordinates_a_lng, cordinates_b_lat, cordinates_b_lng, way_points)
 
-            arraival_date = self.dateTimeEdit.dateTime().addSecs(time).toString("yyyy-MM-dd HH:mm:ss")
+            arraival_date = self.dateTimeEdit.dateTime().addSecs(time).toString("yyyy-MM-dd HH:mm")
 
             if is_driver_busy(driver_id, start_date, arraival_date):
                 QMessageBox.warning(self, "Scheduling Error", "The selected driver is already assigned to a route in this period.")
@@ -250,9 +279,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             web_view.setHtml(buffer.readAll().data().decode())
 
+            cities_json = json.dumps(cities)
+
             layout.addWidget(web_view)
 
-            add_route(bus_id, driver_id, start_date, arraival_date, point_a, point_b, distance, time, html_content)
+            print(cities_json)
+            add_route(bus_id, driver_id, start_date, arraival_date, point_a, point_b, distance, time, html_content, cities_json)
         
 
         
@@ -364,6 +396,74 @@ class DoubleButtonWidget(QWidget):
             conn.close() 
             self.delete_clicked.emit(self.row_idx)  
 
+class DoubleButtonWidgetRoute(QWidget):
+    def __init__(self, row_idx, row_data):
+        super().__init__()
+        self.row_idx = row_idx
+        self.row_data = row_data
+        self.init_ui()
+    
+    info_clicked = Signal(int)  
+    delete_clicked = Signal(int)  
+
+    def init_ui(self):
+        self.info_button = QPushButton()
+        self.delete_button = QPushButton()
+        self.info_button.setIcon(QIcon(":/icons/edit-3-24.png"))
+        self.delete_button.setIcon(QIcon(":/icons/delete-24.png"))
+        self.info_button.setStyleSheet("""
+            QPushButton {
+                background-color: black;
+                color: white;
+                border: none;
+                border-radius: 10px;
+                padding: 5px 10px;
+            }
+            QPushButton:pressed {
+                background-color: #333;
+            }
+        """)
+        self.delete_button.setStyleSheet("""
+            QPushButton {
+                background-color: red;
+                color: white;
+                border: none;
+                border-radius: 10px;
+                padding: 5px 10px;
+            }
+            QPushButton:pressed {
+                background-color: #cc0000;
+            }
+        """)
+        self.info_button.setMinimumSize(50, 20)  
+        self.info_button.setMaximumSize(50, 20)  
+        self.delete_button.setMinimumSize(50, 20)  
+        self.delete_button.setMaximumSize(50, 20)
+
+        self.info_button.clicked.connect(self.info_dialog_open)
+        self.delete_button.clicked.connect(self.delete_row)
+
+        layout = QHBoxLayout()
+        layout.addWidget(self.info_button)
+        layout.addWidget(self.delete_button)
+        self.setLayout(layout)
+
+    def info_dialog_open(self):
+        route_id = self.row_data[0]  # Extract route ID
+        dialog = RouteinfoDialog(route_id)  # Pass route ID to dialog
+        dialog.exec()
+
+    def delete_row(self):
+        reply = QMessageBox.question(self, 'Delete Record',
+                                     "Are you sure you want to delete this record?",
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            conn = sqlite3.connect('bus_management.db')
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM Route WHERE id = ?", (self.row_data[0],))
+            conn.commit()
+            conn.close() 
+            self.delete_clicked.emit(self.row_idx)
 
 class DoubleButtonWidgetDrivers(DoubleButtonWidget):
     def __init__(self, row_idx, row_data, parent=None):
@@ -408,6 +508,48 @@ class BusesDialogUpdate(QDialog, Ui_busesDialogUpdate):
 
         self.accept()  
 
+class RouteinfoDialog(QDialog, routeInfoDialog):
+    def __init__(self, route_id, parent=None):
+        super(RouteinfoDialog, self).__init__(parent)
+        self.setupUi(self)
+        self.route_id = route_id
+
+        route = load_route_by_id(self.route_id)
+        driver_id = route[2]
+        bus_id = route[1]
+
+        html_route = route[9]
+
+        driver = load_driver_by_id(driver_id)
+        bus = load_bus_by_id(bus_id)
+
+        self.label_11.setText(f"Driver: {driver[1]} {driver[2]}")
+        self.label_12.setText(f"Bus: {bus[1]} {bus[2]}")
+        self.label_13.setText(f"Departure Date: {route[3]}")
+        self.label_14.setText(f"Arrival Date: {route[4]}")
+        self.label_15.setText(f"Time in road: {route[8]}")
+
+        if not self.mapWidget.layout():
+                layout = QVBoxLayout(self.mapWidget)
+                self.mapWidget.setLayout(layout)
+        else:
+                layout = self.mapWidget.layout()
+
+        for i in reversed(range(layout.count())):
+                widget_to_remove = layout.itemAt(i).widget()
+                if isinstance(widget_to_remove, QWebEngineView):
+                    layout.removeWidget(widget_to_remove)
+                    widget_to_remove.deleteLater()  
+
+        web_view = QWebEngineView()
+
+        buffer = QBuffer()
+        buffer.setData(QByteArray(html_route.encode()))
+        buffer.open(QIODevice.ReadOnly)
+
+        web_view.setHtml(buffer.readAll().data().decode())
+
+        layout.addWidget(web_view)
 
 
 class DriversDialogUpdate(QDialog, Ui_driversDialogUpdate):

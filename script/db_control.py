@@ -34,6 +34,7 @@ def create_db():
             distance REAL,
             time TEXT,
             html_report TEXT,
+            waypoints TEXT,
             FOREIGN KEY (bus_id) REFERENCES Buses(id),
             FOREIGN KEY (driver_id) REFERENCES Driver(id)
         )
@@ -68,6 +69,20 @@ def load_route():
     conn.close()
     return rows
 
+def load_schedule():
+    create_db()
+    conn = sqlite3.connect('bus_management.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT Route.id, Route.point_a, Route.point_b, Route.departure_date, Route.arrival_date
+        FROM Route
+        JOIN Buses ON Route.bus_id = Buses.id
+        JOIN Drivers ON Route.driver_id = Drivers.id
+    ''')
+    rows = cursor.fetchall()
+    conn.close()
+    return rows 
+
 def add_bus(model, number_plate, mileage, service_due_to):
     create_db()
     conn = sqlite3.connect('bus_management.db')
@@ -90,13 +105,13 @@ def add_driver(first_name, last_name, license_number, phone):
     conn.commit()
     conn.close()
 
-def add_route(bus_id, driver_id, departure_date, arrival_date, point_a, point_b, distance, time, html_report):
+def add_route(bus_id, driver_id, departure_date, arrival_date, point_a, point_b, distance, time, html_report, waypoints):
     conn = sqlite3.connect('bus_management.db')
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO Route (bus_id, driver_id, departure_date, arrival_date, point_a, point_b, distance, time, html_report)
+        INSERT INTO Route (bus_id, driver_id, departure_date, arrival_date, point_a, point_b, distance, time, html_report, waypoints)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (bus_id, driver_id, departure_date, arrival_date, point_a, point_b, distance, time, html_report))
+    ''', (bus_id, driver_id, departure_date, arrival_date, point_a, point_b, distance, time, html_report, waypoints))
     conn.commit()
     conn.close()
 
@@ -196,6 +211,36 @@ def is_bus_busy(bus_id, start_date, end_date):
     conn.close()  
     
     return count > 0
+
+def load_route_by_id(route_id):
+    conn = sqlite3.connect('bus_management.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT * FROM Route WHERE id = ?
+    ''', (route_id,))
+    route = cursor.fetchone()
+    conn.close()
+    return route
+
+def load_driver_by_id(driver_id):
+    conn = sqlite3.connect('bus_management.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT * FROM Drivers WHERE id = ?
+    ''', (driver_id,))
+    driver = cursor.fetchone()
+    conn.close()
+    return driver
+
+def load_bus_by_id(bus_id):
+    conn = sqlite3.connect('bus_management.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT * FROM Buses WHERE id = ?
+    ''', (bus_id,))
+    bus = cursor.fetchone()
+    conn.close()
+    return bus
 
 
 
