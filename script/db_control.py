@@ -110,7 +110,7 @@ def add_route(bus_id, driver_id, departure_date, arrival_date, point_a, point_b,
     cursor = conn.cursor()
     cursor.execute('''
         INSERT INTO Route (bus_id, driver_id, departure_date, arrival_date, point_a, point_b, distance, time, html_report, waypoints)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', (bus_id, driver_id, departure_date, arrival_date, point_a, point_b, distance, time, html_report, waypoints))
     conn.commit()
     conn.close()
