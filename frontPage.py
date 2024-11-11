@@ -528,6 +528,18 @@ class RouteinfoDialog(QDialog, routeInfoDialog):
         self.label_13.setText(f"Departure Date: {route[3]}")
         self.label_14.setText(f"Arrival Date: {route[4]}")
         self.label_15.setText(f"Time in road: {route[8]}")
+        self.labelRoute.setStyleSheet("font-size: 16px; font-weight: bold;")
+
+        waypoints = json.loads(route[10])
+
+        
+        waypoints_string = " "
+        if waypoints != []:
+                waypoints_string = f"--> {' --> '.join(waypoints)} "
+        labelText = f"{route[5]} {waypoints_string} --> {route[6]}"
+        self.labelRoute.setText(labelText)
+
+
 
         if not self.mapWidget.layout():
                 layout = QVBoxLayout(self.mapWidget)
