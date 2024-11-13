@@ -36,6 +36,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButtonRoute.clicked.connect(self.create_routes)
         self.pushButtonWayPoints.clicked.connect(self.open_waypoints_dialog)
         self.schedule_button.clicked.connect(self.switch_to_schedule_page)
+        self.filterButton.clicked.connect(self.filter_routes)
 
         self.dateTimeEdit.setDateTime(current_date_time.addDays(10))
         self.dateTimeEdit.setMinimumDateTime(current_date_time)
@@ -57,6 +58,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.comboBoxA.currentIndexChanged.connect(self.route_label_changed)
         self.comboBoxB.currentIndexChanged.connect(self.route_label_changed)
+
+        
 
 
     def switch_to_buses_page(self):
@@ -285,9 +288,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             print(cities_json)
             add_route(bus_id, driver_id, start_date, arraival_date, point_a, point_b, distance, time, html_content, cities_json)
-        
 
-        
+
+    def filter_routes(self):
+        """Фільтрує таблицю, залишаючи тільки рядки з вибраною датою."""
+        selected_date = self.calendarWidget.selectedDate().toString("yyyy-MM-dd")
+
+        for row in range(self.scheduleTable.rowCount()):
+
+            row_date_time = self.scheduleTable.item(row, 2).text()
+
+            row_date = row_date_time.split(" ")[0]
+
+            if row_date == selected_date:
+                self.scheduleTable.setRowHidden(row, False)
+            else:
+                self.scheduleTable.setRowHidden(row, True)
 
 
 
