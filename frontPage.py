@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt, Signal, QDate, QUrl, QBuffer, QByteArray, QIODevice, QDateTime
+from PySide6.QtCore import Qt, Signal, QDate, QUrl, QBuffer, QByteArray, QIODevice, QDateTime, QStringListModel
 from PySide6.QtWidgets import QMainWindow, QMenu, QWidget,  QTableWidgetItem, QDialog, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWebEngineWidgets import QWebEngineView
@@ -27,6 +27,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle("Bus Management")
+
+        self.check_driver_service_due_to()
 
         self.bus_button.clicked.connect(self.switch_to_buses_page)
         self.routes_button.clicked.connect(self.switch_to_routes_page)
@@ -64,21 +66,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def switch_to_buses_page(self):
         print("Switching to buses page")
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
         self.load_buses_data()
     
     def switch_to_routes_page(self):
         print("Switching to routes page")
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(2)
     
     def switch_to_drivers_page(self):
         print("Switching to drivers page")
-        self.stackedWidget.setCurrentIndex(3)
+        self.stackedWidget.setCurrentIndex(4)
         self.load_driver_data()
 
     def switch_to_schedule_page(self):
         print("Switching to schedule page")
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(3)
         self.load_route_data()
 
     def open_add_bus_dialog(self):
@@ -149,6 +151,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             driver_name = row[1] + ' ' + row[2]
             self.comboBoxDriver.addItem(driver_name, driver_id)
 
+    def check_driver_service_due_to(self):
+        conn = sqlite3.connect("bus_management.db")
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT id, model, number_plate, service_due_to FROM Buses")
+        overdue_buses = []
+
+        for row in cursor.fetchall():
+            bus_id, model, number_plate, service_due_to = row
+            service_due_date = service_due_to
+        
+        if service_due_date < current_date_time.toString("yyyy-MM-dd"):
+            self.everythingisfine.setVisible(False)
+            overdue_buses.append(f"Service is out of date for bus {model} with number plate {number_plate}")
+            model = QStringListModel()
+            model.setStringList(overdue_buses)
+            self.warningList.setModel(model)
+
+
     def load_route_data(self):
 
         self.scheduleTable.setColumnWidth(0, 150)
@@ -194,6 +215,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         start_date = self.dateTimeEdit.dateTime().toString("yyyy-MM-dd HH:mm")
         way_points = []
 
+        bus_info = load_driver_by_id(driver_id)
+
+        service_due_to = bus_info[4]
 
         if not driver_id:
             QMessageBox.warning(self, "Input Error", "Please select a driver.")
@@ -207,6 +231,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QMessageBox.warning(self, "Input Error", "Please select a start date.")
         elif point_a == point_b:
             QMessageBox.warning(self, "Input Error", "Start and Finish cannot be the same.")
+        elif service_due_to < current_date_time.toString("yyyy-MM-dd"):
+            QMessageBox.warning(self, "Input Error", "The selected bus is not available for this route. Because it is out of service.")
         else:
 
             cities = self.selected_items
@@ -543,7 +569,7 @@ class RouteinfoDialog(QDialog, routeInfoDialog):
         self.label_12.setText(f"Bus: {bus[1]} {bus[2]}")
         self.label_13.setText(f"Departure Date: {route[3]}")
         self.label_14.setText(f"Arrival Date: {route[4]}")
-        self.label_15.setText(f"Time in road: {route[8]}")
+        self.label_15.setText(f"Time in road: {seconds_to_hours_minutes(int(route[8]))}")
         self.labelRoute.setStyleSheet("font-size: 16px; font-weight: bold;")
 
         waypoints = json.loads(route[10])
@@ -578,6 +604,11 @@ class RouteinfoDialog(QDialog, routeInfoDialog):
         web_view.setHtml(buffer.readAll().data().decode())
 
         layout.addWidget(web_view)
+
+def seconds_to_hours_minutes(seconds):
+    hours = seconds // 3600
+    minutes = (seconds % 3600) // 60
+    return f"{hours} hours {minutes} minutes"
 
 
 class DriversDialogUpdate(QDialog, Ui_driversDialogUpdate):

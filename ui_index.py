@@ -16,9 +16,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCalendarWidget, QComboBox, QDateTimeEdit,
-    QHeaderView, QLabel, QLineEdit, QMainWindow,
-    QPushButton, QSizePolicy, QSplitter, QStackedWidget,
-    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
+    QHeaderView, QLabel, QLineEdit, QListView,
+    QMainWindow, QPushButton, QSizePolicy, QSplitter,
+    QStackedWidget, QTableWidget, QTableWidgetItem, QVBoxLayout,
+    QWidget)
 import resources_rc
 
 class Ui_MainWindow(object):
@@ -205,7 +206,50 @@ class Ui_MainWindow(object):
 "background-color: rgb(255, 255, 255);")
         self.stackedWidget = QStackedWidget(self.main_screen)
         self.stackedWidget.setObjectName(u"stackedWidget")
-        self.stackedWidget.setGeometry(QRect(10, 0, 851, 711))
+        self.stackedWidget.setGeometry(QRect(10, 10, 851, 711))
+        self.main_page = QWidget()
+        self.main_page.setObjectName(u"main_page")
+        self.mainLabel = QLabel(self.main_page)
+        self.mainLabel.setObjectName(u"mainLabel")
+        self.mainLabel.setGeometry(QRect(320, 10, 151, 71))
+        self.mainLabel.setStyleSheet(u"font: 18pt \"MS Shell Dlg 2\";\n"
+"color: rgb(0, 0, 0);\n"
+"\n"
+"")
+        self.widget = QWidget(self.main_page)
+        self.widget.setObjectName(u"widget")
+        self.widget.setGeometry(QRect(10, 320, 811, 241))
+        self.widget.setStyleSheet(u"background-color: rgb(240, 240, 240);")
+        self.everythingisfine = QLabel(self.widget)
+        self.everythingisfine.setObjectName(u"everythingisfine")
+        self.everythingisfine.setGeometry(QRect(320, 70, 181, 71))
+        self.everythingisfine.setStyleSheet(u"font: 14pt \"MS Shell Dlg 2\";\n"
+"color: rgb(0, 0, 0);\n"
+"\n"
+"")
+        self.warningList = QListView(self.widget)
+        self.warningList.setObjectName(u"warningList")
+        self.warningList.setGeometry(QRect(20, 10, 771, 201))
+        self.warningList.setStyleSheet(u"border:none\n"
+"")
+        self.warningList.raise_()
+        self.everythingisfine.raise_()
+        self.pushButton = QPushButton(self.main_page)
+        self.pushButton.setObjectName(u"pushButton")
+        self.pushButton.setGeometry(QRect(300, 110, 221, 91))
+        self.pushButton.setStyleSheet(u"QPushButton{\n"
+"color: rgb(0, 0, 0);\n"
+"font: 14pt \"MS Shell Dlg 2\";\n"
+"border: none;\n"
+"border-radius: 10px;\n"
+"margin-left: 10px;\n"
+"margin-right:10px;\n"
+"}")
+        icon6 = QIcon()
+        icon6.addFile(u":/icons/bus.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.pushButton.setIcon(icon6)
+        self.pushButton.setIconSize(QSize(200, 200))
+        self.stackedWidget.addWidget(self.main_page)
         self.buses_page = QWidget()
         self.buses_page.setObjectName(u"buses_page")
         self.label_4 = QLabel(self.buses_page)
@@ -383,7 +427,7 @@ class Ui_MainWindow(object):
         self.label_15.setStyleSheet(u"font: 75 16pt \"MS Shell Dlg 2\";")
         self.calendarWidget = QCalendarWidget(self.schedule_page)
         self.calendarWidget.setObjectName(u"calendarWidget")
-        self.calendarWidget.setGeometry(QRect(130, 40, 581, 161))
+        self.calendarWidget.setGeometry(QRect(130, 40, 581, 171))
         self.calendarWidget.setGridVisible(False)
         self.calendarWidget.setHorizontalHeaderFormat(QCalendarWidget.SingleLetterDayNames)
         self.calendarWidget.setVerticalHeaderFormat(QCalendarWidget.NoVerticalHeader)
@@ -469,7 +513,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(0)
         self.comboBoxA.setCurrentIndex(-1)
 
 
@@ -485,6 +529,9 @@ class Ui_MainWindow(object):
         self.drivers_button.setText(QCoreApplication.translate("MainWindow", u"Drivers", None))
         self.settings_button.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
         self.exit_button.setText(QCoreApplication.translate("MainWindow", u"Exit", None))
+        self.mainLabel.setText(QCoreApplication.translate("MainWindow", u" Main page", None))
+        self.everythingisfine.setText(QCoreApplication.translate("MainWindow", u"Everything is fine", None))
+        self.pushButton.setText("")
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Buses info", None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"Welocme to buses information page!", None))
         self.addBusButton.setText(QCoreApplication.translate("MainWindow", u"Add Bus", None))
