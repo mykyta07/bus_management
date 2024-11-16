@@ -28,7 +28,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle("Bus Management")
 
-        self.check_driver_service_due_to()
+        self.check_bus_service_due_to()
 
         self.bus_button.clicked.connect(self.switch_to_buses_page)
         self.routes_button.clicked.connect(self.switch_to_routes_page)
@@ -65,6 +65,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         
 
     def switch_to_main_page(self):
+        self.check_bus_service_due_to()
         self.stackedWidget.setCurrentIndex(0)
 
 
@@ -155,7 +156,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             driver_name = row[1] + ' ' + row[2]
             self.comboBoxDriver.addItem(driver_name, driver_id)
 
-    def check_driver_service_due_to(self):
+    def check_bus_service_due_to(self):
         conn = sqlite3.connect("bus_management.db")
         cursor = conn.cursor()
 
@@ -166,12 +167,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             bus_id, model, number_plate, service_due_to = row
             service_due_date = service_due_to
         
-        if service_due_date < current_date_time.toString("yyyy-MM-dd"):
-            self.everythingisfine.setVisible(False)
-            overdue_buses.append(f"Service is out of date for bus {model} with number plate {number_plate}")
-            model = QStringListModel()
-            model.setStringList(overdue_buses)
-            self.warningList.setModel(model)
+            if service_due_date < current_date_time.toString("yyyy-MM-dd"):
+                self.everythingisfine.setVisible(False)
+                overdue_buses.append(f"Service is out of date for bus {model} with number plate {number_plate}")
+
+        model = QStringListModel()
+        model.setStringList(overdue_buses)
+        self.warningList.setModel(model)
+        print(overdue_buses)  
 
 
     def load_route_data(self):
@@ -219,7 +222,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         start_date = self.dateTimeEdit.dateTime().toString("yyyy-MM-dd HH:mm")
         way_points = []
 
-        bus_info = load_driver_by_id(driver_id)
+        bus_info = load_bus_by_id(driver_id)
 
         service_due_to = bus_info[4]
 
@@ -437,7 +440,7 @@ class DoubleButtonWidget(QWidget):
         if reply == QMessageBox.Yes:
             conn = sqlite3.connect('bus_management.db')
             cursor = conn.cursor()
-            cursor.execute("DELETE FROM Buses WHERE id = ?", (self.row_data[0],))
+            cursor.execute("DELETE FROM Buses WHERE id = ?", (self.row_data[0],))            
             conn.commit()
             conn.close() 
             self.delete_clicked.emit(self.row_idx)  
