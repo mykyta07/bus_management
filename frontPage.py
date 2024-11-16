@@ -27,6 +27,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle("Bus Management")
+        self.init_db()
 
         self.check_bus_service_due_to()
 
@@ -52,7 +53,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.load_buses_data()
         self.load_driver_data()
         self.load_route_data()
-        self.init_db()
+        
 
         self.comboBoxA.addItems(points)
         self.comboBoxB.addItems(points)
