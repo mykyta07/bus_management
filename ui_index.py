@@ -274,7 +274,7 @@ class Ui_MainWindow(object):
         self.addBusButton.setGeometry(QRect(10, 90, 121, 41))
         self.addBusButton.setStyleSheet(u"border:\"none\";\n"
 "background-color: rgb(0, 255, 127);\n"
-"font: 75 10pt \"MS Shell Dlg 2\";\n"
+"font: 75 10pt \"Arial\";\n"
 "color: rgb(255, 255, 255);\n"
 "border-radius:\"10px\"")
         self.addBusButton.setCheckable(True)
@@ -364,7 +364,7 @@ class Ui_MainWindow(object):
         self.pushButtonRoute.setGeometry(QRect(100, 640, 231, 61))
         self.pushButtonRoute.setStyleSheet(u"border:\"none\";\n"
 "background-color: rgb(0, 255, 127);\n"
-"font: 75 10pt \"MS Shell Dlg 2\";\n"
+"font: 75 15pt \"MS Shell Dlg 2\";\n"
 "color: rgb(255, 255, 255);\n"
 "border-radius:\"10px\"")
         self.pushButtonRoute.setCheckable(True)
@@ -388,7 +388,7 @@ class Ui_MainWindow(object):
         self.pushButtonWayPoints.setGeometry(QRect(0, 530, 391, 51))
         self.pushButtonWayPoints.setStyleSheet(u"border:\"none\";\n"
 "background-color: rgb(230, 228, 227);\n"
-"font: 75 10pt \"MS Shell Dlg 2\";\n"
+"font: 75 10pt \"Arial\";\n"
 "color: rgb(0, 0, 0);\n"
 "border-radius:\"10px\"")
         self.pushButtonWayPoints.setCheckable(True)
@@ -520,7 +520,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(2)
         self.comboBoxA.setCurrentIndex(-1)
 
 
