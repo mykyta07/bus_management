@@ -1,5 +1,6 @@
 <RCC>
   <qresource>
+    <file>icons/info-32.png</file>
     <file>icons/bus.png</file>
     <file>icons/bus_front.png</file>
     <file>icons/calendar-10-32.png</file>

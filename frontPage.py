@@ -451,7 +451,7 @@ class DoubleButtonWidgetRoute(QWidget):
     def init_ui(self):
         self.info_button = QPushButton()
         self.delete_button = QPushButton()
-        self.info_button.setIcon(QIcon(":/icons/edit-3-24.png"))
+        self.info_button.setIcon(QIcon(":/icons/info-32.png"))
         self.delete_button.setIcon(QIcon(":/icons/delete-24.png"))
         self.info_button.setStyleSheet("""
             QPushButton {
