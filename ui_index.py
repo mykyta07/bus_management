@@ -34,11 +34,6 @@ class Ui_MainWindow(object):
         self.sidebar_menu.setGeometry(QRect(0, 0, 241, 801))
         self.sidebar_menu.setStyleSheet(u"\n"
 "background-color: rgb(1,1,1)")
-        self.label_2 = QLabel(self.sidebar_menu)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(10, 10, 221, 71))
-        self.label_2.setStyleSheet(u"font: 18pt \"MS Shell Dlg 2\";\n"
-"color: rgb(255, 255, 255);")
         self.layoutWidget = QWidget(self.sidebar_menu)
         self.layoutWidget.setObjectName(u"layoutWidget")
         self.layoutWidget.setGeometry(QRect(0, 120, 241, 281))
@@ -199,6 +194,18 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addWidget(self.exit_button)
 
+        self.pushButton_2 = QPushButton(self.sidebar_menu)
+        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.pushButton_2.setGeometry(QRect(0, 10, 241, 101))
+        self.pushButton_2.setStyleSheet(u"QPushButton{\n"
+"color: rgb(255, 255, 255);\n"
+"font: 18pt \"MS Shell Dlg 2\";\n"
+"border: none;\n"
+"border-radius: 10px;\n"
+"margin-left: 10px;\n"
+"margin-right:10px;\n"
+"}\n"
+"")
         self.main_screen = QWidget(self.centralwidget)
         self.main_screen.setObjectName(u"main_screen")
         self.main_screen.setGeometry(QRect(250, 80, 871, 731))
@@ -522,13 +529,13 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Bus Managment", None))
         self.schedule_button.setText(QCoreApplication.translate("MainWindow", u"Schedule", None))
         self.routes_button.setText(QCoreApplication.translate("MainWindow", u"Routes", None))
         self.bus_button.setText(QCoreApplication.translate("MainWindow", u"Buses", None))
         self.drivers_button.setText(QCoreApplication.translate("MainWindow", u"Drivers", None))
         self.settings_button.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
         self.exit_button.setText(QCoreApplication.translate("MainWindow", u"Exit", None))
+        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Bus Managment", None))
         self.mainLabel.setText(QCoreApplication.translate("MainWindow", u" Main page", None))
         self.everythingisfine.setText(QCoreApplication.translate("MainWindow", u"Everything is fine", None))
         self.pushButton.setText("")

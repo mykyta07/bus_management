@@ -39,6 +39,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButtonWayPoints.clicked.connect(self.open_waypoints_dialog)
         self.schedule_button.clicked.connect(self.switch_to_schedule_page)
         self.filterButton.clicked.connect(self.filter_routes)
+        self.pushButton_2.clicked.connect(self.switch_to_main_page)
 
         self.dateTimeEdit.setDateTime(current_date_time.addDays(10))
         self.dateTimeEdit.setMinimumDateTime(current_date_time)
@@ -62,6 +63,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.comboBoxB.currentIndexChanged.connect(self.route_label_changed)
 
         
+
+    def switch_to_main_page(self):
+        self.stackedWidget.setCurrentIndex(0)
 
 
     def switch_to_buses_page(self):
