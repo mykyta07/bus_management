@@ -294,9 +294,9 @@ margin-right:10px;
     <widget class="QPushButton" name="pushButton_2">
      <property name="geometry">
       <rect>
-       <x>0</x>
+       <x>-10</x>
        <y>10</y>
-       <width>241</width>
+       <width>261</width>
        <height>101</height>
       </rect>
      </property>
@@ -312,7 +312,7 @@ margin-right:10px;
 </string>
      </property>
      <property name="text">
-      <string>Bus Managment</string>
+      <string>Bus Management</string>
      </property>
     </widget>
    </widget>
@@ -339,7 +339,7 @@ background-color: rgb(255, 255, 255);</string>
       </rect>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="main_page">
       <widget class="QLabel" name="mainLabel">
@@ -1112,7 +1112,7 @@ color: rgb(0, 0, 0);</string>
       <rect>
        <x>10</x>
        <y>40</y>
-       <width>221</width>
+       <width>261</width>
        <height>31</height>
       </rect>
      </property>
@@ -1122,7 +1122,7 @@ color: rgb(153, 153, 153);
 </string>
      </property>
      <property name="text">
-      <string>Welcome to Bus Managment</string>
+      <string>Welcome to Bus Management</string>
      </property>
     </widget>
    </widget>

@@ -325,7 +325,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
     def filter_routes(self):
-        """Фільтрує таблицю, залишаючи тільки рядки з вибраною датою."""
+
         selected_date = self.calendarWidget.selectedDate().toString("yyyy-MM-dd")
 
         for row in range(self.scheduleTable.rowCount()):
@@ -384,8 +384,8 @@ class DoubleButtonWidget(QWidget):
         self.row_data = row_data
         self.init_ui()
     
-    edit_clicked = Signal(int)  # Signal for edit button clicked
-    delete_clicked = Signal(int)  # Signal for delete button clicked
+    edit_clicked = Signal(int)  
+    delete_clicked = Signal(int)  
 
     def init_ui(self):
         self.edit_button = QPushButton()

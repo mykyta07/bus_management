@@ -196,7 +196,7 @@ class Ui_MainWindow(object):
 
         self.pushButton_2 = QPushButton(self.sidebar_menu)
         self.pushButton_2.setObjectName(u"pushButton_2")
-        self.pushButton_2.setGeometry(QRect(0, 10, 241, 101))
+        self.pushButton_2.setGeometry(QRect(-10, 10, 261, 101))
         self.pushButton_2.setStyleSheet(u"QPushButton{\n"
 "color: rgb(255, 255, 255);\n"
 "font: 18pt \"MS Shell Dlg 2\";\n"
@@ -512,7 +512,7 @@ class Ui_MainWindow(object):
 "color: rgb(0, 0, 0);")
         self.label_3 = QLabel(self.header)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setGeometry(QRect(10, 40, 221, 31))
+        self.label_3.setGeometry(QRect(10, 40, 261, 31))
         self.label_3.setStyleSheet(u"font: 10pt \"MS Shell Dlg 2\";\n"
 "color: rgb(153, 153, 153);\n"
 "")
@@ -520,7 +520,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(3)
         self.comboBoxA.setCurrentIndex(-1)
 
 
@@ -535,7 +535,7 @@ class Ui_MainWindow(object):
         self.drivers_button.setText(QCoreApplication.translate("MainWindow", u"Drivers", None))
         self.settings_button.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
         self.exit_button.setText(QCoreApplication.translate("MainWindow", u"Exit", None))
-        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Bus Managment", None))
+        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Bus Management", None))
         self.mainLabel.setText(QCoreApplication.translate("MainWindow", u" Main page", None))
         self.everythingisfine.setText(QCoreApplication.translate("MainWindow", u"Everything is fine", None))
         self.pushButton.setText("")
@@ -593,6 +593,6 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem14.setText(QCoreApplication.translate("MainWindow", u"Actions", None));
         self.lineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Search...", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Hi, Admin!", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Welcome to Bus Managment", None))
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Welcome to Bus Management", None))
     # retranslateUi
 
