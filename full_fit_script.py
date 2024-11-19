@@ -1,112 +1,69 @@
 import sqlite3
 
-class BusManagementDB:
-    def __init__(self, db_name='bus_management.db'):
-        self.db_name = db_name
-        self.init_db()
+# Підключення до бази даних (створення файлу, якщо його не існує)
+conn = sqlite3.connect('bus_management.db')
+cursor = conn.cursor()
 
-    def init_db(self):
-        # Connect to the SQLite database (or create it if it doesn't exist)
-        conn = sqlite3.connect(self.db_name)
-        cursor = conn.cursor()
+# Створення таблиць
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS Buses (
+        id INTEGER PRIMARY KEY,
+        model TEXT,
+        number_plate TEXT,
+        mileage INTEGER,
+        service_due_to TEXT
+    )
+''')
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS Drivers (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        first_name TEXT,
+        last_name TEXT,
+        license_number TEXT,
+        phone TEXT
+    )
+''')
 
-        # Create the Buses table if it doesn't already exist
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS Buses (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                model TEXT,
-                number_plate TEXT,
-                mileage INTEGER,
-                service_due_to TEXT
-            )
-        ''')
+# Дані для заповнення таблиць
+buses_data = [
+    (1, "Mercedes-Benz Sprinter", "AB1234CD", 120000, "2025-05-01"),
+    (2, "Ford Transit", "XY5678EF", 80000, "2025-03-15"),
+    (3, "Volkswagen Crafter", "GH9012IJ", 95000, "2025-07-10"),
+    (4, "Renault Master", "KL3456MN", 110000, "2025-04-20"),
+    (5, "Peugeot Boxer", "OP7890QR", 70000, "2025-08-30"),
+    (6, "Citroën Jumper", "ST1234UV", 85000, "2025-06-05"),
+    (7, "Iveco Daily", "WX5678YZ", 140000, "2025-01-12"),
+    (8, "Fiat Ducato", "AB3456CD", 60000, "2025-09-01"),
+    (9, "Hyundai H350", "EF7890GH", 75000, "2025-10-25"),
+    (10, "Toyota HiAce", "IJ1234KL", 130000, "2025-11-15")
+]
 
-        # Create the Driver table if it doesn't already exist
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS Drivers (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                first_name TEXT,
-                last_name TEXT,
-                license_number TEXT,
-                phone TEXT
-            )
-        ''')
+drivers_data = [
+    ("John", "Doe", "D12345678", "+123456789"),
+    ("Jane", "Smith", "D87654321", "+987654321"),
+    ("Robert", "Johnson", "D23456789", "+112233445"),
+    ("Emily", "Davis", "D34567890", "+223344556"),
+    ("Michael", "Brown", "D45678901", "+334455667"),
+    ("Sarah", "Jones", "D56789012", "+445566778"),
+    ("William", "Garcia", "D67890123", "+556677889"),
+    ("Linda", "Martinez", "D78901234", "+667788990"),
+    ("James", "Rodriguez", "D89012345", "+778899001"),
+    ("Elizabeth", "Hernandez", "D90123456", "+889900112")
+]
 
-        # Commit the changes and close the connection
-        conn.commit()
-        conn.close()
+# Додавання записів у таблиці
+cursor.executemany('''
+    INSERT INTO Buses (id, model, number_plate, mileage, service_due_to)
+    VALUES (?, ?, ?, ?, ?)
+''', buses_data)
 
-    # Method to add a bus
-    def add_bus(self, model, number_plate, mileage, service_due_to):
-        conn = sqlite3.connect(self.db_name)
-        cursor = conn.cursor()
+cursor.executemany('''
+    INSERT INTO Drivers (first_name, last_name, license_number, phone)
+    VALUES (?, ?, ?, ?)
+''', drivers_data)
 
-        # Insert a new bus record into the Buses table
-        cursor.execute('''
-            INSERT INTO Buses (model, number_plate, mileage, service_due_to)
-            VALUES (?, ?, ?, ?)
-        ''', (model, number_plate, mileage, service_due_to))
+# Збереження змін і закриття підключення
+conn.commit()
+conn.close()
 
-        # Commit the transaction and close the connection
-        conn.commit()
-        conn.close()
-
-    # Method to get all buses
-    def get_all_buses(self):
-        conn = sqlite3.connect(self.db_name)
-        cursor = conn.cursor()
-
-        # Fetch all records from the Buses table
-        cursor.execute('SELECT * FROM Buses')
-        buses = cursor.fetchall()
-
-        # Close the connection
-        conn.close()
-
-        return buses
-
-    # Method to add a driver
-    def add_driver(self, first_name, last_name, license_number, phone):
-        conn = sqlite3.connect(self.db_name)
-        cursor = conn.cursor()
-
-        # Insert a new driver record into the Driver table
-        cursor.execute('''
-            INSERT INTO Drivers (first_name, last_name, license_number, phone)
-            VALUES (?, ?, ?, ?)
-        ''', (first_name, last_name, license_number, phone))
-
-        # Commit the transaction and close the connection
-        conn.commit()
-        conn.close()
-
-    # Method to get all drivers
-    def get_all_drivers(self):
-        conn = sqlite3.connect(self.db_name)
-        cursor = conn.cursor()
-
-        # Fetch all records from the Driver table
-        cursor.execute('SELECT * FROM Driver')
-        drivers = cursor.fetchall()
-
-        # Close the connection
-        conn.close()
-
-        return drivers
-
-# Script to create the database, add sample data, and retrieve the data
-if __name__ == "__main__":
-    # Initialize the database
-    db = BusManagementDB()
-
-    # Add sample buses
-    db.add_bus("Mercedes-Benz", "ABC123", 50000, "2024-11-01")
-    db.add_bus("Volvo", "XYZ456", 75000, "2024-12-15")
-    db.add_bus("Scania", "LMN789", 30000, "2025-01-20")
-
-    # Add sample drivers
-    db.add_driver("John", "Doe", "DL12345", "555-1234")
-    db.add_driver("Jane", "Smith", "DL54321", "555-5678")
-    db.add_driver("Mike", "Johnson", "DL98765", "555-8765")
-
-    
+print("Таблиці успішно заповнені.")
