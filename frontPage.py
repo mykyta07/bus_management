@@ -223,7 +223,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         start_date = self.dateTimeEdit.dateTime().toString("yyyy-MM-dd HH:mm")
         way_points = []
 
-        bus_info = load_bus_by_id(driver_id)
+        bus_info = load_bus_by_id(bus_id)
 
         service_due_to = bus_info[4]
 
